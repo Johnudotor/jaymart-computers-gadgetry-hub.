@@ -1,11 +1,15 @@
+
 import React, { useEffect, useState } from "react";
 import { createRoot } from "react-dom/client";
 import "./styles.css";
 
 const SITE = {
-  name: "Udotor John Itsenegbemhe", business: "Jaymart Computers and Gadgetry Hub",
-  location: "Benin City, Edo State, Nigeria", email: "johnudotor@gmail.com",
-  phone: "+234 815 601 5526", whatsapp: "2348104675749",
+  name: "Udotor John Itsenegbemhe",
+  business: "Jaymart Computers and Gadgetry Hub",
+  location: "Benin City, Edo State, Nigeria",
+  email: "johnudotor@gmail.com",
+  phone: "+234 815 601 5526",
+  whatsapp: "2348104675749",
   github: "https://github.com/johnudotor",
   linkedin: "https://linkedin.com/in/udotor-john-itsenegbemhe-0a621678",
   youtube: "https://youtube.com/@jaymartcomputers?si=Ii-PmG4jkO0yfgld",
@@ -13,167 +17,528 @@ const SITE = {
   instagram: "https://www.instagram.com/jaymartcomputers1?rpxt=ZXh2aGg4cDVsNGZ4&utm_source=qr",
   tiktok: "https://www.tiktok.com/@jaymartcomputers",
 };
-const CATEGORIES = ["All Products","Laptops & Computers","Computer Accessories","Mobile Phones","Phone Accessories","Audio & Wearables","Networking","Solar Panels & Power","Solar Accessories","Storage & Components"];
-// Prices are editable examples. Confirm prices, stock, specifications and delivery before publishing.
+
+const CATEGORIES = [
+  "All Products", "Laptops & Computers", "Computer Accessories",
+  "Mobile Phones", "Phone Accessories", "Audio & Wearables",
+  "Networking", "Solar Panels & Power", "Solar Accessories",
+  "Storage & Components"
+];
+
 const PRODUCTS = [
-["laptop-hp","HP Laptop","Laptops & Computers",450000,"hp-laptop.jpg","Laptop for office work, online learning, business and everyday computing."],
-["laptop-dell","Dell Laptop","Laptops & Computers",480000,"dell-laptop.jpg","Dell notebook for productivity, business and professional use."],
-["laptop-lenovo","Lenovo Laptop","Laptops & Computers",420000,"lenovo-laptop.jpg","Laptop options for students, offices and home users."],
-["macbook","Apple MacBook","Laptops & Computers",850000,"macbook.jpg","MacBook for development, creative work and productivity."],
-["desktop","Desktop Computer","Laptops & Computers",350000,"desktop-computer.jpg","Desktop system for office, business, school or home use."],
-["monitor","Computer Monitor","Computer Accessories",125000,"monitor.jpg","External display for workstations and home offices."],
-["keyboard","USB Keyboard","Computer Accessories",12000,"keyboard.jpg","Wired keyboard for desktop computers and compatible devices."],
-["wireless-keyboard","Wireless Keyboard","Computer Accessories",22000,"wireless-keyboard.jpg","Wireless keyboard for a cleaner desk setup."],
-["mouse","Computer Mouse","Computer Accessories",8000,"mouse.jpg","Computer mouse for everyday navigation and productivity."],
-["wireless-mouse","Wireless Mouse","Computer Accessories",15000,"wireless-mouse.jpg","Wireless mouse for laptops and desktop systems."],
-["laptop-bag","Laptop Bag","Computer Accessories",18000,"laptop-bag.jpg","Protective laptop bag for your computer and accessories."],
-["laptop-stand","Laptop Stand","Computer Accessories",18000,"laptop-stand.jpg","Laptop stand for a more comfortable workstation setup."],
-["cooling-pad","Laptop Cooling Pad","Computer Accessories",22000,"cooling-pad.jpg","Laptop cooling pad. Check size and compatibility."],
-["usb-hub","USB-C Hub and Adapter","Computer Accessories",25000,"usb-c-hub.jpg","Multiport adapter for compatible laptops, tablets and devices."],
-["webcam","USB Webcam","Computer Accessories",28000,"webcam.jpg","External webcam for online meetings, classes and streaming."],
-["printer","Computer Printer","Computer Accessories",165000,"printer.jpg","Printer for home, office or business use."],
-["iphone","Apple iPhone","Mobile Phones",750000,"iphone.jpg","iPhone models subject to availability; confirm model and condition."],
-["samsung","Samsung Galaxy Phone","Mobile Phones",450000,"samsung-phone.jpg","Samsung Galaxy smartphone; confirm series, memory and storage."],
-["tecno","TECNO Smartphone","Mobile Phones",220000,"tecno-phone.jpg","TECNO smartphones for communication and everyday productivity."],
-["infinix","Infinix Smartphone","Mobile Phones",200000,"infinix-phone.jpg","Infinix smartphones; confirm model, RAM, storage and colour."],
-["itel","itel Smartphone","Mobile Phones",110000,"itel-phone.jpg","itel phones for everyday mobile use."],
-["tablet","Tablet","Mobile Phones",250000,"tablet.jpg","Tablet options for learning, business, reading and entertainment."],
-["charger","Phone Charger and Adapter","Phone Accessories",12000,"phone-charger.jpg","Charging adapter; confirm connector and device compatibility."],
-["cable","USB Charging Cable","Phone Accessories",5000,"charging-cable.jpg","Charging and data cable; confirm connector type."],
-["powerbank","Power Bank","Phone Accessories",25000,"power-bank.jpg","Portable charging for compatible phones and devices."],
-["phone-case","Phone Case and Cover","Phone Accessories",5000,"phone-case.jpg","Protective phone case; specify the exact phone model."],
-["screen-protector","Screen Protector","Phone Accessories",4000,"screen-protector.jpg","Screen protection for compatible phones."],
-["car-charger","Car Phone Charger","Phone Accessories",10000,"car-charger.jpg","Vehicle charger for compatible phones and USB devices."],
-["selfie-stick","Selfie Stick and Phone Tripod","Phone Accessories",15000,"selfie-stick.jpg","Phone holder for selfies, video calls and content creation."],
-["phone-holder","Phone Holder","Phone Accessories",8000,"phone-holder.jpg","Desk or vehicle phone holder."],
-["memory-card","MicroSD Memory Card","Storage & Components",9000,"memory-card.jpg","Removable storage for supported devices; confirm capacity."],
-["flash-drive","USB Flash Drive","Storage & Components",8000,"flash-drive.jpg","Portable file storage; choose capacity and connector."],
-["external-drive","External Hard Drive or SSD","Storage & Components",95000,"external-drive.jpg","External storage for backup and file transfer."],
-["earbuds","Wireless Earbuds","Audio & Wearables",25000,"wireless-earbuds.jpg","Wireless earbuds for calls, music and everyday listening."],
-["headphones","Bluetooth Headphones","Audio & Wearables",35000,"headphones.jpg","Wireless headphones; confirm battery and audio features."],
-["speaker","Portable Bluetooth Speaker","Audio & Wearables",28000,"bluetooth-speaker.jpg","Portable speaker for music and entertainment."],
-["smartwatch","Smartwatch","Audio & Wearables",35000,"smartwatch.jpg","Smartwatch options; confirm phone compatibility and features."],
-["microphone","USB or Wireless Microphone","Audio & Wearables",30000,"microphone.jpg","Microphone for content creation, streaming, calls or recording."],
-["router","Wi-Fi Router","Networking",35000,"router.jpg","Router for home, office and small-business connectivity."],
-["modem","Internet Modem","Networking",45000,"modem.jpg","Internet modem; confirm network compatibility."],
-["switch","Network Switch","Networking",30000,"network-switch.jpg","Network switch for compatible wired devices."],
-["ethernet","Ethernet Cable","Networking",3000,"ethernet-cable.jpg","Ethernet cable for wired networking."],
-["solar-panel","Solar Panel","Solar Panels & Power",95000,"solar-panel.jpg","Solar panel for compatible solar systems; specify wattage."],
-["solar-fan","Solar Fan","Solar Panels & Power",65000,"solar-fan.jpg","Solar-powered fan or compatible DC fan kit."],
-["solar-light","Solar Security Light","Solar Panels & Power",18000,"solar-security-light.jpg","Solar outdoor lighting; confirm brightness and features."],
-["solar-home-light","Solar Home Lighting Kit","Solar Panels & Power",45000,"solar-home-kit.jpg","Solar lighting kit for household applications."],
-["inverter","Solar Inverter","Solar Panels & Power",250000,"solar-inverter.jpg","Inverter for compatible solar or backup-power installation."],
-["hybrid-inverter","Hybrid Solar Inverter","Solar Panels & Power",450000,"hybrid-inverter.jpg","Hybrid inverter for compatible solar, battery and grid systems."],
-["solar-battery","Solar Battery","Solar Panels & Power",280000,"solar-battery.jpg","Battery for a compatible backup-power system."],
-["power-station","Portable Power Station","Solar Panels & Power",350000,"power-station.jpg","Portable energy storage for compatible devices and appliances."],
-["solar-generator","Solar Generator Kit","Solar Panels & Power",300000,"solar-generator.jpg","Portable solar power kit; confirm included components."],
-["solar-controller","Solar Charge Controller","Solar Accessories",25000,"solar-controller.jpg","Charge controller for compatible panels and batteries."],
-["solar-cable","Solar DC Cable","Solar Accessories",5000,"solar-cable.jpg","Solar cable for compatible installations."],
-["solar-connectors","Solar Connectors","Solar Accessories",3000,"solar-connectors.jpg","Solar connectors and compatible cable accessories."],
-["solar-mounting","Solar Panel Mounting Kit","Solar Accessories",25000,"solar-mounting-kit.jpg","Mounting hardware for appropriate panel installations."],
-["dc-fan","DC Fan for Solar Systems","Solar Accessories",22000,"dc-fan.jpg","DC fan for compatible solar or battery-powered systems."],
-["solar-pump","Solar Water Pump","Solar Accessories",125000,"solar-water-pump.jpg","Solar water pump options for appropriate applications."],
-["solar-inverter-cable","Inverter Cable and Fuse Kit","Solar Accessories",18000,"inverter-cable-kit.jpg","Suitable cables, fuses and connection accessories."],
-["surge-protector","Surge Protection Device","Solar Accessories",18000,"surge-protector.jpg","Surge protection for compatible electrical and solar installations."]
-].map(([id,name,category,price,file,description])=>({id,name,category,price,image:`/images/${file}`,description,available:true}));
+  ["laptop-hp","HP Laptop","Laptops & Computers",450000,"hp-laptop.jpg","Laptop for office work, online learning, business and everyday computing."],
+  ["laptop-dell","Dell Laptop","Laptops & Computers",480000,"dell-laptop.jpg","Dell notebook for productivity, business and professional use."],
+  ["laptop-lenovo","Lenovo Laptop","Laptops & Computers",420000,"lenovo-laptop.jpg","Laptop options for students, offices and home users."],
+  ["macbook","Apple MacBook","Laptops & Computers",850000,"macbook.jpg","MacBook for development, creative work and productivity."],
+  ["desktop","Desktop Computer","Laptops & Computers",350000,"desktop-computer.jpg","Desktop system for office, business, school or home use."],
+  ["monitor","Computer Monitor","Computer Accessories",125000,"monitor.jpg","External display for workstations and home offices."],
+  ["keyboard","USB Keyboard","Computer Accessories",12000,"keyboard.jpg","Wired keyboard for desktop computers and compatible devices."],
+  ["wireless-keyboard","Wireless Keyboard","Computer Accessories",22000,"wireless-keyboard.jpg","Wireless keyboard for a cleaner desk setup."],
+  ["mouse","Computer Mouse","Computer Accessories",8000,"mouse.jpg","Computer mouse for everyday navigation and productivity."],
+  ["wireless-mouse","Wireless Mouse","Computer Accessories",15000,"wireless-mouse.jpg","Wireless mouse for laptops and desktop systems."],
+  ["laptop-bag","Laptop Bag","Computer Accessories",18000,"laptop-bag.jpg","Protective laptop bag for your computer and accessories."],
+  ["laptop-stand","Laptop Stand","Computer Accessories",18000,"laptop-stand.jpg","Laptop stand for a more comfortable workstation setup."],
+  ["cooling-pad","Laptop Cooling Pad","Computer Accessories",22000,"cooling-pad.jpg","Laptop cooling pad. Check size and compatibility."],
+  ["usb-hub","USB-C Hub and Adapter","Computer Accessories",25000,"usb-c-hub.jpg","Multiport adapter for compatible laptops, tablets and devices."],
+  ["webcam","USB Webcam","Computer Accessories",28000,"webcam.jpg","External webcam for online meetings, classes and streaming."],
+  ["printer","Computer Printer","Computer Accessories",165000,"printer.jpg","Printer for home, office or business use."],
+  ["iphone","Apple iPhone","Mobile Phones",750000,"iphone.jpg","iPhone models subject to availability; confirm model and condition."],
+  ["samsung","Samsung Galaxy Phone","Mobile Phones",450000,"samsung-phone.jpg","Samsung Galaxy smartphone; confirm series, memory and storage."],
+  ["tecno","TECNO Smartphone","Mobile Phones",220000,"tecno-phone.jpg","TECNO smartphones for communication and everyday productivity."],
+  ["infinix","Infinix Smartphone","Mobile Phones",200000,"infinix-phone.jpg","Infinix smartphones; confirm model, RAM, storage and colour."],
+  ["itel","itel Smartphone","Mobile Phones",110000,"itel-phone.jpg","itel phones for everyday mobile use."],
+  ["tablet","Tablet","Mobile Phones",250000,"tablet.jpg","Tablet options for learning, business, reading and entertainment."],
+  ["charger","Phone Charger and Adapter","Phone Accessories",12000,"phone-charger.jpg","Charging adapter; confirm connector and device compatibility."],
+  ["cable","USB Charging Cable","Phone Accessories",5000,"charging-cable.jpg","Charging and data cable; confirm connector type."],
+  ["powerbank","Power Bank","Phone Accessories",25000,"power-bank.jpg","Portable charging for compatible phones and devices."],
+  ["phone-case","Phone Case and Cover","Phone Accessories",5000,"phone-case.jpg","Protective phone case; specify the exact phone model."],
+  ["screen-protector","Screen Protector","Phone Accessories",4000,"screen-protector.jpg","Screen protection for compatible phones."],
+  ["car-charger","Car Phone Charger","Phone Accessories",10000,"car-charger.jpg","Vehicle charger for compatible phones and USB devices."],
+  ["selfie-stick","Selfie Stick and Phone Tripod","Phone Accessories",15000,"selfie-stick.jpg","Phone holder for selfies, video calls and content creation."],
+  ["phone-holder","Phone Holder","Phone Accessories",8000,"phone-holder.jpg","Desk or vehicle phone holder."],
+  ["memory-card","MicroSD Memory Card","Storage & Components",9000,"memory-card.jpg","Removable storage for supported devices; confirm capacity."],
+  ["flash-drive","USB Flash Drive","Storage & Components",8000,"flash-drive.jpg","Portable file storage; choose capacity and connector."],
+  ["external-drive","External Hard Drive or SSD","Storage & Components",95000,"external-drive.jpg","External storage for backup and file transfer."],
+  ["earbuds","Wireless Earbuds","Audio & Wearables",25000,"wireless-earbuds.jpg","Wireless earbuds for calls, music and everyday listening."],
+  ["headphones","Bluetooth Headphones","Audio & Wearables",35000,"headphones.jpg","Wireless headphones; confirm battery and audio features."],
+  ["speaker","Portable Bluetooth Speaker","Audio & Wearables",28000,"bluetooth-speaker.jpg","Portable speaker for music and entertainment."],
+  ["smartwatch","Smartwatch","Audio & Wearables",35000,"smartwatch.jpg","Smartwatch options; confirm phone compatibility and features."],
+  ["microphone","USB or Wireless Microphone","Audio & Wearables",30000,"microphone.jpg","Microphone for content creation, streaming, calls or recording."],
+  ["router","Wi-Fi Router","Networking",35000,"router.jpg","Router for home, office and small-business connectivity."],
+  ["modem","Internet Modem","Networking",45000,"modem.jpg","Internet modem; confirm network compatibility."],
+  ["switch","Network Switch","Networking",30000,"network-switch.jpg","Network switch for compatible wired devices."],
+  ["ethernet","Ethernet Cable","Networking",3000,"ethernet-cable.jpg","Ethernet cable for wired networking."],
+  ["solar-panel","Solar Panel","Solar Panels & Power",95000,"solar-panel.jpg","Solar panel for compatible solar systems; specify wattage."],
+  ["solar-fan","Solar Fan","Solar Panels & Power",65000,"solar-fan.jpg","Solar-powered fan or compatible DC fan kit."],
+  ["solar-light","Solar Security Light","Solar Panels & Power",18000,"solar-security-light.jpg","Solar outdoor lighting; confirm brightness and features."],
+  ["solar-home-light","Solar Home Lighting Kit","Solar Panels & Power",45000,"solar-home-kit.jpg","Solar lighting kit for household applications."],
+  ["inverter","Solar Inverter","Solar Panels & Power",250000,"solar-inverter.jpg","Inverter for compatible solar or backup-power installation."],
+  ["hybrid-inverter","Hybrid Solar Inverter","Solar Panels & Power",450000,"hybrid-inverter.jpg","Hybrid inverter for compatible solar, battery and grid systems."],
+  ["solar-battery","Solar Battery","Solar Panels & Power",280000,"solar-battery.jpg","Battery for a compatible backup-power system."],
+  ["power-station","Portable Power Station","Solar Panels & Power",350000,"power-station.jpg","Portable energy storage for compatible devices and appliances."],
+  ["solar-generator","Solar Generator Kit","Solar Panels & Power",300000,"solar-generator.jpg","Portable solar power kit; confirm included components."],
+  ["solar-controller","Solar Charge Controller","Solar Accessories",25000,"solar-controller.jpg","Charge controller for compatible panels and batteries."],
+  ["solar-cable","Solar DC Cable","Solar Accessories",5000,"solar-cable.jpg","Solar cable for compatible installations."],
+  ["solar-connectors","Solar Connectors","Solar Accessories",3000,"solar-connectors.jpg","Solar connectors and compatible cable accessories."],
+  ["solar-mounting","Solar Panel Mounting Kit","Solar Accessories",25000,"solar-mounting-kit.jpg","Mounting hardware for appropriate panel installations."],
+  ["dc-fan","DC Fan for Solar Systems","Solar Accessories",22000,"dc-fan.jpg","DC fan for compatible solar or battery-powered systems."],
+  ["solar-pump","Solar Water Pump","Solar Accessories",125000,"solar-water-pump.jpg","Solar water pump options for appropriate applications."],
+  ["solar-inverter-cable","Inverter Cable and Fuse Kit","Solar Accessories",18000,"inverter-cable-kit.jpg","Suitable cables, fuses and connection accessories."],
+  ["surge-protector","Surge Protection Device","Solar Accessories",18000,"surge-protector.jpg","Surge protection for compatible electrical and solar installations."]
+].map(([id,name,category,price,file,description]) => ({
+  id, name, category, price, image: `/images/${file}`, description, available: true
+}));
 
 const PROJECTS = [
-{title:"Personal Portfolio Website",type:"Web Development",image:"/images/project-portfolio.jpg",description:"A personal website for presenting technical skills, professional background and project work.",link:SITE.github},
-{title:"Business Website",type:"Web Development",image:"/images/project-business.jpg",description:"Business-focused web experiences with clear service information and customer enquiry pathways.",link:SITE.github},
-{title:"Technology Tutorials",type:"Content Creation",image:"/images/project-tech-content.jpg",description:"Practical technology content covering computer features, software and useful digital tools.",link:SITE.youtube}
+  {title:"Personal Portfolio Website",type:"Web Development",image:"/images/project-portfolio.jpg",description:"A personal website for presenting technical skills, professional background and project work.",link:SITE.github},
+  {title:"Business Website",type:"Web Development",image:"/images/project-business.jpg",description:"Business-focused web experiences with clear service information and customer enquiry pathways.",link:SITE.github},
+  {title:"Technology Tutorials",type:"Content Creation",image:"/images/project-tech-content.jpg",description:"Practical technology content covering computer features, software and useful digital tools.",link:SITE.youtube}
 ];
+
 const CARPENTRY_GALLERY = [
-{image:"/images/carpentry/roofing-1.jpg",title:"Roof Carpentry",description:"Roof framing, timber work and roofing project."},
-{image:"/images/carpentry/decking-1.jpg",title:"Decking and Formwork",description:"Decking carpentry and formwork for a building project."},
-{image:"/images/carpentry/ceiling-1.jpg",title:"Ceiling Installation",description:"Ceiling framework, boarding and related carpentry."},
-{image:"/images/carpentry/lintel-1.jpg",title:"Lintel Formwork",description:"Timber formwork associated with lintel construction."},
-{image:"/images/carpentry/parapet-1.jpg",title:"Parapet Work",description:"Carpentry and formwork associated with parapet construction."},
-{image:"/images/carpentry/boarding-1.jpg",title:"House Boarding",description:"Boarding and building-related timber work."},
-{image:"/images/carpentry/site-1.jpg",title:"Construction Site",description:"A building project showing completed or ongoing carpentry work."}
+  {image:"/images/carpentry/roofing-1.jpg",title:"Roof Carpentry",description:"Roof framing, timber work and roofing project."},
+  {image:"/images/carpentry/decking-1.jpg",title:"Decking and Formwork",description:"Decking carpentry and formwork for a building project."},
+  {image:"/images/carpentry/ceiling-1.jpg",title:"Ceiling Installation",description:"Ceiling framework, boarding and related carpentry."},
+  {image:"/images/carpentry/lintel-1.jpg",title:"Lintel Formwork",description:"Timber formwork associated with lintel construction."},
+  {image:"/images/carpentry/parapet-1.jpg",title:"Parapet Work",description:"Carpentry and formwork associated with parapet construction."},
+  {image:"/images/carpentry/boarding-1.jpg",title:"House Boarding",description:"Boarding and building-related timber work."},
+  {image:"/images/carpentry/site-1.jpg",title:"Construction Site",description:"A building project showing completed or ongoing carpentry work."}
 ];
-const SKILLS=["JavaScript","React","Next.js","HTML5","CSS3","Tailwind CSS","Node.js","Express","MongoDB","Mongoose","API Integration","AI Integration","GitHub","Website Hosting"];
-const money=(v)=>new Intl.NumberFormat("en-NG",{style:"currency",currency:"NGN",maximumFractionDigits:0}).format(v);
+
+const SKILLS = ["JavaScript","React","Next.js","HTML5","CSS3","Tailwind CSS","Node.js","Express","MongoDB","Mongoose","API Integration","AI Integration","GitHub","Website Hosting"];
+const money = v => new Intl.NumberFormat("en-NG", {style:"currency",currency:"NGN",maximumFractionDigits:0}).format(v);
+const readSavedCart = () => {
+  try { return JSON.parse(localStorage.getItem("jaymart-enquiry-cart") || "[]"); }
+  catch { return []; }
+};
 
 function Photo({src,alt,className=""}) {
- const [failed,setFailed]=useState(false);
- return failed?<div className={`${className} fallback`}>Add your image:<br/>{src}</div>:<img className={className} src={src} alt={alt} loading="lazy" onError={()=>setFailed(true)}/>;
+  const [failed,setFailed] = useState(false);
+  return failed
+    ? <div className={`${className} fallback`}>Image not found<br/>{src}</div>
+    : <img className={className} src={src} alt={alt} loading="lazy" onError={() => setFailed(true)}/>;
 }
+
 function ProductCard({product,onAdd}) {
- return <article className="product-card"><div className="product-image"><Photo src={product.image} alt={product.name}/><span className={`stock ${product.available?"":"out"}`}>{product.available?"Enquire to confirm stock":"Out of stock"}</span></div><div className="product-info"><small>{product.category}</small><h3>{product.name}</h3><p>{product.description}</p><strong className="price">{money(product.price)}</strong><span className="price-note">Example price · confirm before ordering</span><button className="btn dark full" disabled={!product.available} onClick={()=>onAdd(product)}>{product.available?"Add to Enquiry +":"Unavailable"}</button></div></article>;
+  return <article className="product-card">
+    <div className="product-image">
+      <Photo src={product.image} alt={product.name}/>
+      <span className={`stock ${product.available?"":"out"}`}>{product.available?"Enquire to confirm stock":"Out of stock"}</span>
+    </div>
+    <div className="product-info">
+      <small>{product.category}</small>
+      <h3>{product.name}</h3>
+      <p>{product.description}</p>
+      <strong className="price">{money(product.price)}</strong>
+      <span className="price-note">Example price · confirm before ordering</span>
+      <button className="btn dark full" disabled={!product.available} onClick={() => onAdd(product)}>
+        {product.available?"Add to Enquiry +":"Unavailable"}
+      </button>
+    </div>
+  </article>;
 }
+
 function ProductSwiper({title,subtitle,products,onAdd,onExplore}) {
- const [index,setIndex]=useState(0),[paused,setPaused]=useState(false);
- const move=(d)=>setIndex(i=>(i+d+products.length)%products.length);
- useEffect(()=>{if(paused)return;const t=window.setInterval(()=>setIndex(i=>(i+1)%products.length),3500);return()=>window.clearInterval(t)},[paused,products.length]);
- return <section className="featured"><div className="featured-head"><div><p className="eyebrow">{title}</p><p className="muted">{subtitle}</p></div><div className="arrows"><button aria-label={`Previous ${title}`} onClick={()=>move(-1)}>←</button><button aria-label={`Next ${title}`} onClick={()=>move(1)}>→</button></div></div><div className="featured-window" onMouseEnter={()=>setPaused(true)} onMouseLeave={()=>setPaused(false)}><div className="featured-track" style={{"--index":index}}>{products.map(p=><div className="featured-item" key={p.id}><ProductCard product={p} onAdd={onAdd}/></div>)}</div></div><div className="featured-foot"><span>{products.length} featured products · automatic and manual sliding</span><button className="btn explore" onClick={onExplore}>Explore More ↗</button></div></section>;
+  const [index,setIndex] = useState(0);
+  const [paused,setPaused] = useState(false);
+  const move = d => setIndex(i => (i+d+products.length)%products.length);
+
+  useEffect(() => {
+    if(paused || products.length < 2) return;
+    const timer = window.setInterval(() => setIndex(i => (i+1)%products.length),3500);
+    return () => window.clearInterval(timer);
+  },[paused,products.length]);
+
+  return <section className="featured">
+    <div className="featured-head">
+      <div><p className="eyebrow">{title}</p><p className="muted">{subtitle}</p></div>
+      <div className="arrows">
+        <button aria-label={`Previous ${title}`} onClick={() => move(-1)}>←</button>
+        <button aria-label={`Next ${title}`} onClick={() => move(1)}>→</button>
+      </div>
+    </div>
+    <div className="featured-window" onMouseEnter={() => setPaused(true)} onMouseLeave={() => setPaused(false)}>
+      <div className="featured-track" style={{"--index":index}}>
+        {products.map(p => <div className="featured-item" key={p.id}><ProductCard product={p} onAdd={onAdd}/></div>)}
+      </div>
+    </div>
+    <div className="featured-foot">
+      <span>{products.length} featured products · automatic and manual sliding</span>
+      <button className="btn explore" onClick={onExplore}>Explore More ↗</button>
+    </div>
+  </section>;
 }
+
 function ProjectSwiper() {
- const [index,setIndex]=useState(0),[paused,setPaused]=useState(false);
- const move=(d)=>setIndex(i=>(i+d+PROJECTS.length)%PROJECTS.length);
- useEffect(()=>{if(paused)return;const t=window.setInterval(()=>setIndex(i=>(i+1)%PROJECTS.length),4000);return()=>window.clearInterval(t)},[paused]);
- return <div className="project-swiper" onMouseEnter={()=>setPaused(true)} onMouseLeave={()=>setPaused(false)}><div className="project-window"><div className="project-track" style={{"--index":index}}>{PROJECTS.map(p=><article className="project-card" key={p.title}><div className="project-image"><Photo src={p.image} alt={p.title}/></div><div className="project-body"><small>{p.type}</small><h3>{p.title}</h3><p>{p.description}</p><a href={p.link} target="_blank" rel="noreferrer">Explore related work ↗</a></div></article>)}</div></div><div className="swiper-foot"><span>PROJECT {String(index+1).padStart(2,"0")} / {String(PROJECTS.length).padStart(2,"0")}</span><div className="dots">{PROJECTS.map((p,i)=><button key={p.title} aria-label={`Show ${p.title}`} className={index===i?"active":""} onClick={()=>setIndex(i)}/>)}</div><div className="arrows"><button aria-label="Previous project" onClick={()=>move(-1)}>←</button><button aria-label="Next project" onClick={()=>move(1)}>→</button></div></div></div>;
+  const [index,setIndex] = useState(0);
+  const [paused,setPaused] = useState(false);
+  const move = d => setIndex(i => (i+d+PROJECTS.length)%PROJECTS.length);
+
+  useEffect(() => {
+    if(paused) return;
+    const timer = window.setInterval(() => setIndex(i => (i+1)%PROJECTS.length),4000);
+    return () => window.clearInterval(timer);
+  },[paused]);
+
+  return <div className="project-swiper" onMouseEnter={() => setPaused(true)} onMouseLeave={() => setPaused(false)}>
+    <div className="project-window"><div className="project-track" style={{"--index":index}}>
+      {PROJECTS.map(p => <article className="project-card" key={p.title}>
+        <div className="project-image"><Photo src={p.image} alt={p.title}/></div>
+        <div className="project-body"><small>{p.type}</small><h3>{p.title}</h3><p>{p.description}</p><a href={p.link} target="_blank" rel="noreferrer">Explore related work ↗</a></div>
+      </article>)}
+    </div></div>
+    <div className="swiper-foot">
+      <span>PROJECT {String(index+1).padStart(2,"0")} / {String(PROJECTS.length).padStart(2,"0")}</span>
+      <div className="dots">{PROJECTS.map((p,i) => <button key={p.title} aria-label={`Show ${p.title}`} className={index===i?"active":""} onClick={() => setIndex(i)}/>)}</div>
+      <div className="arrows"><button aria-label="Previous project" onClick={() => move(-1)}>←</button><button aria-label="Next project" onClick={() => move(1)}>→</button></div>
+    </div>
+  </div>;
 }
 
 function App() {
- const [activeCategory,setActiveCategory]=useState("All Products"),[search,setSearch]=useState(""),[cart,setCart]=useState([]),[slide,setSlide]=useState(0),[paused,setPaused]=useState(false),[mobileMenu,setMobileMenu]=useState(false),[notice,setNotice]=useState("");
- const [customer,setCustomer]=useState({name:"",phone:"",location:"",message:""}),[contact,setContact]=useState({name:"",email:"",message:""});
- const visibleProducts=PRODUCTS.filter(p=>(activeCategory==="All Products"||p.category===activeCategory)&&(!search.trim()||`${p.name} ${p.description} ${p.category}`.toLowerCase().includes(search.trim().toLowerCase())));
- const cartQuantity=cart.reduce((sum,item)=>sum+item.quantity,0),currentSlide=CARPENTRY_GALLERY[slide];
- const computers=PRODUCTS.filter(p=>["Laptops & Computers","Computer Accessories"].includes(p.category)).slice(0,10);
- const phones=PRODUCTS.filter(p=>["Mobile Phones","Phone Accessories"].includes(p.category)).slice(0,10);
- const solar=PRODUCTS.filter(p=>["Solar Panels & Power","Solar Accessories"].includes(p.category)).slice(0,10);
- useEffect(()=>{if(paused)return;const t=window.setInterval(()=>setSlide(i=>(i+1)%CARPENTRY_GALLERY.length),4500);return()=>window.clearInterval(t)},[paused]);
- const moveSlide=d=>setSlide(i=>(i+d+CARPENTRY_GALLERY.length)%CARPENTRY_GALLERY.length);
- function addProduct(product){setCart(old=>{const item=old.find(p=>p.id===product.id);return item?old.map(p=>p.id===product.id?{...p,quantity:p.quantity+1}:p):[...old,{...product,quantity:1}]});setNotice(`${product.name} added to your enquiry list.`)}
- function setQuantity(id,quantity){setCart(old=>old.map(p=>p.id===id?{...p,quantity}:p).filter(p=>p.quantity>0))}
- function orderMessage(){return [`PRODUCT ENQUIRY — ${SITE.business}`,"","Hello Jaymart, please confirm the availability and final prices of these items:","",...cart.map((p,i)=>`${i+1}. ${p.name}\n   Category: ${p.category}\n   Quantity: ${p.quantity}\n   Displayed price: ${money(p.price)} each (please confirm)`),"",`Name: ${customer.name}`,`Phone: ${customer.phone}`,`Location: ${customer.location||"Not supplied"}`,`Additional requirements: ${customer.message||"None"}`,"","Please confirm current prices, specifications, warranty and delivery options before I complete my order."].join("\n")}
- function sendOrder(e){e.preventDefault();if(!cart.length){setNotice("Add at least one product to your enquiry list.");return}if(!customer.name.trim()||!customer.phone.trim()){setNotice("Enter your name and phone number to continue.");return}window.open(`https://wa.me/${SITE.whatsapp}?text=${encodeURIComponent(orderMessage())}`,"_blank","noopener,noreferrer");setNotice("Review the prepared WhatsApp message and press Send.")}
- function sendContact(e){e.preventDefault();if(!contact.name.trim()||!contact.email.trim()||!contact.message.trim()){setNotice("Complete your name, email and message.");return}window.open(`https://wa.me/${SITE.whatsapp}?text=${encodeURIComponent(`Name: ${contact.name}\nEmail: ${contact.email}\n\n${contact.message}`)}`,"_blank","noopener,noreferrer")}
- const explore=category=>{setActiveCategory(category);setSearch("");document.getElementById("catalogue")?.scrollIntoView({behavior:"smooth"})};
- const links=[["About","#about"],["Experience","#experience"],["Projects","#projects"],["Services","#services"],["Shop","#shop"],["Carpentry","#carpentry"],["Contact","#contact"]];
- return <div className="jaymart">
- <style>{`
- :root{--bg:#0b192b;--accent:#65f0d0;--line:#c6dcf321;--muted:#91a5bb;--shopbg:#f4f7fb}*{box-sizing:border-box}html{scroll-behavior:smooth;scroll-padding-top:20px}body{margin:0;font-family:Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}.jaymart{background:var(--bg);color:#e5edf7;line-height:1.65}.jaymart a{color:inherit;text-decoration:none}.jaymart button,.jaymart input,.jaymart textarea{font:inherit}.jaymart button:focus-visible,.jaymart a:focus-visible,.jaymart input:focus-visible,.jaymart textarea:focus-visible{outline:3px solid var(--accent);outline-offset:3px}.wrap{width:min(1240px,calc(100% - 44px));margin:auto}.eyebrow{margin:0 0 10px;color:var(--accent);font:700 .74rem/1.4 ui-monospace,monospace;letter-spacing:.15em;text-transform:uppercase}.heading{margin:0 0 18px;font-size:clamp(2rem,4vw,3rem);line-height:1.13;letter-spacing:-.045em;color:#eef5ff}.lead{max-width:740px;margin:0;color:#a9bbcf}.section{padding:84px 0;border-top:1px solid var(--line)}.section-head{max-width:790px;margin-bottom:34px}
- .site-header{position:relative;z-index:100;background:#081423;border-bottom:1px solid var(--line)}.nav{min-height:76px;display:flex;align-items:center;justify-content:space-between;gap:20px}.brand{display:flex;align-items:center;gap:11px}.brand-mark{width:43px;height:43px;display:grid;place-items:center;border-radius:12px;background:var(--accent);color:#0b192b;font-weight:950}.brand strong{display:block;font-size:.94rem;letter-spacing:.06em}.brand small{display:block;color:var(--muted);font-size:.68rem}.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;border:1px solid transparent;border-radius:9px;padding:11px 16px;font-weight:800;font-size:.86rem;cursor:pointer;transition:transform .22s,background .22s,box-shadow .22s}.btn:hover{transform:translateY(-3px);box-shadow:0 10px 25px #0002}.primary{color:#071829!important;background:var(--accent)}.outline{color:#e9f2ff!important;border-color:#e2f0ff47;background:transparent}.dark{color:white;background:#102238}.green{color:white;background:#128654}.full{width:100%}.menu-button{border:1px solid #ffffff35;border-radius:9px;background:#102238;color:white;padding:10px 13px;cursor:pointer}.menu-button:hover{color:var(--accent);border-color:var(--accent)}.backdrop{position:fixed;inset:0;z-index:140;border:0;background:#020812aa}.drawer{position:fixed;z-index:150;right:0;top:0;bottom:0;width:min(360px,88vw);padding:25px;background:#09182a;border-left:1px solid var(--line);box-shadow:-24px 0 70px #0007;overflow:auto;animation:draw .2s ease-out}.drawer-top{display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid var(--line);padding-bottom:20px}.drawer-top button{color:white;background:transparent;border:1px solid var(--line);padding:7px 10px;border-radius:8px}.drawer-links{display:grid;margin-top:12px}.drawer-links a{padding:14px 2px;border-bottom:1px solid var(--line);color:#dce8f6}.drawer-links a:hover{color:var(--accent);padding-left:8px}.drawer-note{color:var(--muted);font-size:.84rem;margin-top:24px}@keyframes draw{from{transform:translateX(25px);opacity:.5}to{transform:none;opacity:1}}
- .hero{padding:75px 0 68px}.hero-grid{display:grid;grid-template-columns:minmax(0,1fr) 250px;gap:45px;align-items:center}.hero h1{margin:15px 0;font-size:clamp(2.7rem,6vw,5rem);line-height:1.02;letter-spacing:-.06em;color:#f3f7fc}.hero h1 span{color:var(--accent)}.hero-title{color:#b5c8dc;font-size:1.15rem}.hero-copy{max-width:700px;color:#a2b4c9}.hero-buttons,.hero-social{display:flex;flex-wrap:wrap;gap:11px;margin-top:24px}.hero-social{gap:15px;color:#a7b9cd;font-size:.82rem}.hero-social a:hover{color:var(--accent)}.hero-aside{border-left:1px solid var(--line);padding-left:24px}.aside-label{color:var(--accent);font:700 .7rem ui-monospace,monospace}.aside-link{display:block;padding:10px 0;border-bottom:1px solid var(--line);font-size:.85rem;color:#c9d8e9}.aside-link:after{content:" ↗";color:var(--accent)}
- .about-grid{display:grid;grid-template-columns:1fr 1.15fr;gap:45px;align-items:start}.profile{min-height:330px;display:grid;place-items:center;padding:24px;border:1px solid var(--line);border-radius:16px;background:linear-gradient(145deg,#102944,#0d1d31);text-align:center}.monogram{width:100px;height:100px;display:grid;place-items:center;margin:0 auto 18px;border-radius:25px;color:#071829;background:var(--accent);font-size:2rem;font-weight:950}.profile strong{display:block;font-size:1.2rem}.profile p,.about-copy p{color:#9fb2c8}.profile-photo{width:100%;max-height:500px;aspect-ratio:4/5;object-fit:cover;border-radius:12px}.facts{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:22px}.fact{padding:13px;border:1px solid var(--line);border-radius:10px}.fact strong,.fact span{display:block}.fact strong{font-size:.87rem}.fact span{color:var(--muted);font-size:.76rem}.tags{display:flex;flex-wrap:wrap;gap:8px;margin-top:20px}.tag{padding:6px 9px;border:1px solid #65f0d02e;border-radius:5px;color:#bdece1;background:#65f0d00b;font:.75rem ui-monospace,monospace}
- .experience-list{border-top:1px solid var(--line)}.experience-item{display:grid;grid-template-columns:125px 1fr;gap:20px;padding:22px 0;border-bottom:1px solid var(--line)}.experience-date{color:#93a8bd;font:.76rem ui-monospace,monospace}.experience-item h3{margin:0 0 5px;font-size:1rem}.experience-item p{margin:0;color:#9fb2c8;font-size:.88rem}.cards{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}.service-card{padding:21px;border:1px solid var(--line);border-radius:13px;background:#ffffff06}.service-card h3{margin:10px 0 7px;font-size:1rem}.service-card p{margin:0;color:#9fb2c8;font-size:.86rem}
- .project-window{overflow:hidden;border-radius:14px}.project-track{display:flex;gap:16px;transform:translateX(calc(var(--index)*(-33.333% - 5.34px)));transition:transform .6s cubic-bezier(.22,.8,.25,1)}.project-card{flex:0 0 calc((100% - 32px)/3);overflow:hidden;border:1px solid var(--line);border-radius:13px;background:#0e2034;transition:transform .3s,border-color .3s,box-shadow .3s}.project-card:hover{transform:translateY(-7px);border-color:#65f0d0a8;box-shadow:0 18px 42px #0005}.project-image{aspect-ratio:16/10;background:#162b42;overflow:hidden}.project-image img{width:100%;height:100%;object-fit:cover;transition:transform .5s}.project-card:hover .project-image img{transform:scale(1.08)}.fallback{display:grid;place-content:center;min-height:140px;padding:15px;color:#8ba2b9;text-align:center;overflow-wrap:anywhere;font-size:.78rem}.project-body{padding:18px}.project-body small,.project-body a{color:var(--accent)}.project-body h3{margin:7px 0}.project-body p{color:#9fb2c8;font-size:.85rem}.project-body a{font-size:.82rem;font-weight:800}.swiper-foot{display:flex;align-items:center;justify-content:space-between;gap:14px;margin-top:17px;color:#9cb0c6;font:.75rem ui-monospace,monospace}.dots{display:flex;gap:7px}.dots button{width:8px;height:8px;border:0;border-radius:10px;background:#536a80;cursor:pointer}.dots button.active{width:23px;background:var(--accent)}.arrows{display:flex;gap:8px}.arrows button{width:38px;height:38px;border:1px solid #8da7c43d;border-radius:50%;color:#eef6ff;background:#102238;cursor:pointer}.arrows button:hover{color:#071829;background:var(--accent)}
- .shop-section{background:var(--shopbg);color:#142237}.shop-section .heading{color:#102238}.shop-section .lead{color:#607187}.shop-section .eyebrow{color:#126b92}.featured{margin:30px 0 40px;padding:20px;border:1px solid #dce4ed;border-radius:15px;background:white;box-shadow:0 8px 28px #132a4608}.featured-head{display:flex;align-items:center;justify-content:space-between;gap:15px;margin-bottom:15px}.featured-head .eyebrow{margin-bottom:3px}.muted{margin:0;color:#718196;font-size:.83rem}.featured-window{overflow:hidden;padding:2px 1px 10px}.featured-track{display:flex;gap:12px;transform:translateX(calc(var(--index)*(-17% - 2px)));transition:transform .55s cubic-bezier(.22,.8,.25,1)}.featured-item{flex:0 0 calc((100% - 60px)/6);min-width:0}.featured-item .product-card{height:100%;box-shadow:none}.featured-item .product-image{aspect-ratio:1}.featured-item .product-info{padding:9px}.featured-item .product-info h3{font-size:.82rem}.featured-item .product-info p{font-size:.71rem}.featured-item .price{font-size:.9rem}.featured-item .price-note{font-size:.62rem}.featured-item .btn{padding:8px 4px;font-size:.7rem}.featured-foot{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;padding-top:14px;border-top:1px solid #e8edf3;color:#75849a;font-size:.77rem}.explore{background:#102238;color:white}.explore:hover{background:#1768b5}.shop-bar{display:grid;grid-template-columns:1fr auto;gap:13px;margin:22px 0 15px}.shop-input,.field input,.field textarea{width:100%;padding:12px;border:1px solid #d8e0ea;border-radius:8px;background:white;color:#14243a}.category-scroll{display:flex;gap:8px;overflow-x:auto;padding:2px 0 13px}.category-btn{flex-shrink:0;padding:8px 12px;border:1px solid #d8e0ea;border-radius:6px;background:white;color:#41546b;font-size:.77rem;font-weight:750;cursor:pointer}.category-btn.active{background:#102238;color:white}.catalogue-meta{display:flex;justify-content:space-between;gap:12px;margin:10px 0 18px;color:#62748a;font-size:.82rem}.product-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px}.product-card{display:flex;flex-direction:column;min-width:0;overflow:hidden;border:1px solid #e0e6ee;border-radius:12px;background:white;box-shadow:0 4px 15px #132a4609}.product-image{position:relative;aspect-ratio:1/.88;overflow:hidden;background:#e9eef4}.product-image img{width:100%;height:100%;object-fit:cover;transition:transform .25s}.product-card:hover .product-image img{transform:scale(1.04)}.stock{position:absolute;top:9px;left:9px;padding:4px 7px;border-radius:5px;color:#126441;background:#e3f8ec;font-size:.65rem;font-weight:800}.stock.out{color:#9e2929;background:#fff0f0}.product-info{display:flex;flex:1;flex-direction:column;padding:13px}.product-info small{color:#58748f;font-size:.67rem;font-weight:800;text-transform:uppercase}.product-info h3{margin:7px 0;color:#14243a;font-size:.92rem;line-height:1.35}.product-info p{flex:1;margin:0 0 12px;color:#6b7b8d;font-size:.77rem}.price{color:#0e263f;font-size:1.05rem}.price-note{margin:3px 0 11px;color:#8a98a8;font-size:.66rem}.cart-section{margin-top:34px;padding:23px;border:1px solid #dce4ed;border-radius:13px;background:white}.cart-section h3{margin:0 0 8px}.cart-intro{margin:0 0 18px;color:#6b7b8d;font-size:.84rem}.cart-layout{display:grid;grid-template-columns:1fr 1fr;gap:26px}.cart-item{display:grid;grid-template-columns:1fr auto;gap:12px;padding:12px 0;border-bottom:1px solid #e6ebf1}.cart-item strong{display:block;font-size:.86rem}.cart-item small{color:#75859a}.qty{display:flex;align-items:center;gap:8px;margin-top:6px}.qty button{width:27px;height:27px;border:1px solid #dbe3ec;border-radius:6px;background:#f8fafc}.remove{border:0;color:#a33131;background:transparent;cursor:pointer;font-size:.76rem}.empty{padding:25px 10px;border:1px dashed #d1dbe6;border-radius:10px;color:#728197;text-align:center}.field{display:grid;gap:6px;margin-bottom:12px}.field label{color:#3e5269;font-size:.78rem;font-weight:800}.field textarea{min-height:88px;resize:vertical}.notice{margin:12px 0;padding:11px 13px;border-radius:8px;color:#145c40;background:#e8f9f0;font-size:.82rem}.note{color:#718096;font-size:.74rem}
- .gallery{overflow:hidden;border:1px solid var(--line);border-radius:16px;background:#071525}.gallery-image{position:relative;height:clamp(300px,58vw,650px);background:#12263c;touch-action:pan-y}.gallery-image>img{width:100%;height:100%;object-fit:cover}.gallery-caption{position:absolute;bottom:0;left:0;right:0;padding:60px 24px 20px;background:linear-gradient(transparent,#030a13f0)}.gallery-caption small{color:var(--accent);font:.74rem ui-monospace,monospace}.gallery-caption h3{margin:5px 0;color:white;font-size:clamp(1.25rem,3vw,2rem)}.gallery-caption p{margin:0;color:#d1deed}.gallery-arrow{position:absolute;top:50%;width:42px;height:42px;border:1px solid #ffffff59;border-radius:50%;color:white;background:#051220a6;font-size:1.4rem;transform:translateY(-50%);cursor:pointer}.gallery-arrow.left{left:12px}.gallery-arrow.right{right:12px}.gallery-bottom{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;padding:13px 15px;border-top:1px solid var(--line)}.gallery-controls{display:flex;gap:7px}.gallery-controls button{padding:7px 9px;border:1px solid var(--line);border-radius:7px;color:#e2edf9;background:#102238;font-size:.76rem;cursor:pointer}.construction-services{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:13px;margin-top:24px}.construction-service{padding:16px;border:1px solid var(--line);border-radius:10px}.construction-service strong,.construction-service span{display:block}.construction-service span{margin-top:5px;color:#9fb2c8;font-size:.79rem}.content-banner{display:flex;justify-content:space-between;align-items:center;gap:24px;padding:24px;border:1px solid var(--line);border-radius:13px;background:#102238}.content-banner h3{margin:0 0 7px}.content-banner p{margin:0;color:#9fb2c8}.socials{display:flex;flex-wrap:wrap;gap:9px;margin-top:20px}.socials a{padding:8px 10px;border:1px solid var(--line);border-radius:7px;color:#c5d4e6;font-size:.78rem}.contact-grid{display:grid;grid-template-columns:.8fr 1.2fr;gap:34px}.contact-list{display:grid;gap:12px}.contact-item,.contact-form{padding:15px;border:1px solid var(--line);border-radius:10px}.contact-item strong,.contact-item a,.contact-item span{display:block}.contact-item a,.contact-item span{margin-top:5px;color:#9fb2c8;overflow-wrap:anywhere}.contact-form{padding:22px;background:#ffffff06}.contact-form .field label{color:#bdcde0}.contact-form .field input,.contact-form .field textarea{border-color:var(--line);color:white;background:#0b192b}.footer{padding:25px 0;border-top:1px solid var(--line);color:#8ea3b9;font-size:.78rem}.footer-row{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}.float-wa{position:fixed;right:18px;bottom:18px;z-index:80;width:52px;height:52px;display:grid;place-items:center;border-radius:50%;color:white!important;background:#15965c;box-shadow:0 8px 24px #0005;font-size:1.4rem}
- @media(max-width:1050px){.product-grid{grid-template-columns:repeat(3,minmax(0,1fr))}.featured-item{flex-basis:calc((100% - 36px)/4)}.featured-track{transform:translateX(calc(var(--index)*(-25% - 3px)))}}
- @media(max-width:850px){.hero-grid,.about-grid,.cart-layout,.contact-grid{grid-template-columns:1fr}.hero-aside{border:0;padding:0}.hero-aside-inner{display:grid;grid-template-columns:1fr 1fr;gap:0 16px}.hero-aside-inner .aside-label{grid-column:1/-1}.cards{grid-template-columns:repeat(2,minmax(0,1fr))}.section{padding:64px 0}.project-card{flex-basis:calc((100% - 16px)/2)}.project-track{transform:translateX(calc(var(--index)*(-50% - 8px)))}.featured-item{flex-basis:calc((100% - 24px)/3)}.featured-track{transform:translateX(calc(var(--index)*(-33.333% - 2px)))}}
- @media(max-width:560px){.wrap{width:calc(100% - 28px)}.brand strong{font-size:.82rem}.brand small{font-size:.61rem}.brand-mark{width:37px;height:37px}.hero{padding:50px 0}.hero h1{font-size:clamp(2.5rem,12vw,3.4rem)}.hero-buttons{flex-direction:column;align-items:stretch}.section{padding:52px 0}.cards,.construction-services{grid-template-columns:1fr}.product-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.product-info{padding:10px}.product-info h3{font-size:.82rem}.product-info p{font-size:.72rem}.product-info .btn{padding:8px 5px;font-size:.7rem}.shop-bar{grid-template-columns:1fr}.catalogue-meta{flex-direction:column;gap:3px}.cart-section{padding:15px}.experience-item{grid-template-columns:1fr;gap:6px}.facts{grid-template-columns:1fr 1fr}.gallery-image{height:380px}.gallery-caption{padding:55px 15px 17px}.gallery-caption p{font-size:.82rem}.content-banner{align-items:stretch;flex-direction:column;padding:18px}.project-card{flex-basis:100%}.project-track{transform:translateX(calc(var(--index)*-100%))}.swiper-foot{flex-wrap:wrap}.featured{padding:12px}.featured-item{flex-basis:calc((100% - 12px)/2)}.featured-track{transform:translateX(calc(var(--index)*(-50% - 2px)))}.featured-item .product-info p{display:none}.featured-item .product-info h3{font-size:.77rem}.featured-item .price{font-size:.82rem}.featured-item .btn{font-size:.65rem;padding:7px 3px}.featured-head{align-items:flex-start}.featured-head .arrows button{width:33px;height:33px}.featured-foot{font-size:.72rem}.contact-form{padding:15px}}
- @media(prefers-reduced-motion:reduce){*,*::before,*::after{scroll-behavior:auto!important;transition-duration:.01ms!important;animation-duration:.01ms!important}}
- `}</style>
- <header className="site-header"><div className="wrap nav"><a className="brand" href="#home" onClick={()=>setMobileMenu(false)}><span className="brand-mark">UJ</span><span><strong>UDOTOR JOHN</strong><small>Developer · Digital Professional</small></span></a><button className="menu-button" onClick={()=>setMobileMenu(v=>!v)} aria-expanded={mobileMenu} aria-controls="site-drawer">{mobileMenu?"✕ Close":"☰ Explore menu"}</button></div></header>
- {mobileMenu&&<><button className="backdrop" aria-label="Close menu" onClick={()=>setMobileMenu(false)}/><aside className="drawer" id="site-drawer"><div className="drawer-top"><strong>Explore Jaymart</strong><button onClick={()=>setMobileMenu(false)}>Close ✕</button></div><nav className="drawer-links">{links.map(([name,href])=><a href={href} key={href} onClick={()=>setMobileMenu(false)}>{name} ↗</a>)}</nav><p className="drawer-note">Web development, technology products, digital services and construction carpentry.</p></aside></>}
- <main>
- <section className="hero" id="home"><div className="wrap hero-grid"><div><p className="eyebrow">Full-Stack Developer · Digital Professional</p><h1>Udotor John<br/><span>Itsenegbemhe.</span></h1><p className="hero-title">I build practical digital experiences for people and businesses.</p><p className="hero-copy">I’m a Computer Science graduate and full-stack web developer working with modern JavaScript technologies, APIs and databases. My professional work also spans website development, social media management, content management and technology education.</p><div className="hero-buttons"><a className="btn primary" href="#projects">Explore My Work ↘</a><a className="btn outline" href="#contact">Let's Talk</a></div><div className="hero-social"><a href={SITE.github} target="_blank" rel="noreferrer">GitHub ↗</a><a href={SITE.linkedin} target="_blank" rel="noreferrer">LinkedIn ↗</a><a href={SITE.youtube} target="_blank" rel="noreferrer">YouTube ↗</a></div></div><aside className="hero-aside"><p className="aside-label">ON THIS WEBSITE</p>{[["About me","#about"],["Experience","#experience"],["Selected work","#projects"],["Digital services","#services"],["Online shop","#shop"],["Building carpentry","#carpentry"]].map(([n,h])=><a className="aside-link" href={h} key={h}>{n}</a>)}</aside></div></section>
- <section className="section" id="about"><div className="wrap about-grid"><div className="profile">
- {/* PROFILE PHOTO: upload portrait to public/images/profile.jpg. Later replace the monogram block below with: <img className="profile-photo" src="/images/profile.jpg" alt="Udotor John Itsenegbemhe" />. Change the path if you use another filename. */}
- <div><div className="monogram">UJ</div><strong>Udotor John Itsenegbemhe</strong><p>Computer Science Graduate · Full-Stack Developer</p></div></div><div className="about-copy"><p className="eyebrow">01 / About</p><h2 className="heading">Technology, communication and practical problem-solving.</h2><p>I hold a B.Sc. in Computer Science from Ambrose Alli University, where I graduated magna cum laude. My technical background includes React, Next.js, JavaScript, Node.js, Express, MongoDB, APIs, AI integration and website hosting.</p><p>I also work in social media and content management, including practical technology content. Outside the digital space, I bring almost 15 years of carpentry experience focused on building construction, roofing and related timber work.</p><div className="facts"><div className="fact"><strong>B.Sc. Computer Science</strong><span>Ambrose Alli University</span></div><div className="fact"><strong>Web Development Training</strong><span>React, Node.js, MongoDB and JavaScript</span></div><div className="fact"><strong>Digital Content</strong><span>Social media and content management</span></div><div className="fact"><strong>Building Carpentry</strong><span>Roofing and construction-related woodwork</span></div></div><div className="tags">{SKILLS.map(s=><span className="tag" key={s}>{s}</span>)}</div></div></div></section>
- <section className="section" id="experience"><div className="wrap"><div className="section-head"><p className="eyebrow">02 / Experience and Background</p><h2 className="heading">The foundation behind my work.</h2><p className="lead">A combination of formal education, technical training, computer-based operational experience and practical work.</p></div><div className="experience-list">
- <article className="experience-item"><div className="experience-date">Current</div><div><h3>Founder &amp; Chief Executive Officer — Jaymart Computers and Gadgetry Hub</h3><p>Leading a technology-focused business offering computers and accessories, mobile devices, solar products, digital services and online customer enquiries.</p></div></article>
- <article className="experience-item"><div className="experience-date">2019 – 2020</div><div><h3>Web Development Industrial Trainee — Infinity Computer Tech</h3><p>Completed industrial training focused on web development, HTML, CSS, PHP fundamentals and website hosting.</p></div></article>
- <article className="experience-item"><div className="experience-date">2011 – 2020</div><div><h3>Ad Hoc Staff / Computer Operator — INEC</h3><p>Supported computer-based operations during Continuous Voter Registration and election-related assignments.</p></div></article>
- <article className="experience-item"><div className="experience-date">Education</div><div><h3>B.Sc. Computer Science — Ambrose Alli University</h3><p>Graduated in August 2021, magna cum laude.</p></div></article>
- <article className="experience-item"><div className="experience-date">Practical work</div><div><h3>Building Carpentry and Construction Work</h3><p>Almost 15 years of carpentry experience in roofing, decking/formwork, ceilings, boarding and related building construction work.</p></div></article>
- </div></div></section>
- <section className="section" id="projects"><div className="wrap"><div className="section-head"><p className="eyebrow">03 / Selected Work</p><h2 className="heading">Work that shows how I think and build.</h2><p className="lead">Browse selected web development and technology content work. Replace image placeholders with screenshots from your actual projects when ready.</p></div><ProjectSwiper/></div></section>
- <section className="section" id="services"><div className="wrap"><div className="section-head"><p className="eyebrow">04 / Services</p><h2 className="heading">Digital services for growing businesses.</h2><p className="lead">Practical services focused on building a professional online presence, improving customer communication and presenting products clearly.</p></div><div className="cards">{[["⌘","Website Design and Development","Responsive business websites, portfolio websites and service websites."],["⚙","Full-Stack Development","Frontend and backend development with JavaScript, React, Node.js, Express and MongoDB."],["📣","Social Media Management","Page management, content planning, publishing and audience engagement support."],["✍","Content Management","Organising and maintaining website content, product information and digital communications."],["🎬","Technology Content Creation","Practical computer tips, Windows tutorials and useful digital technology content."],["🧰","Computer Support","Computer troubleshooting, software setup, maintenance and practical technical assistance."]].map(([icon,title,desc])=><article className="service-card" key={title}><span>{icon}</span><h3>{title}</h3><p>{desc}</p></article>)}</div></div></section>
- <section className="section shop-section" id="shop"><div className="wrap"><div className="section-head"><p className="eyebrow">JAYMART ONLINE SHOP</p><h2 className="heading">JAYMART COMPUTERS AND GADGETRY HUB</h2><p className="lead">Computers, mobile phones, accessories, audio devices, networking equipment, solar panels, solar fans, inverters, batteries and related power accessories. Add products to your enquiry list to request a confirmed quote.</p></div>
- <ProductSwiper title="COMPUTERS & ACCESSORIES" subtitle="Computers, workstations and everyday essentials." products={computers} onAdd={addProduct} onExplore={()=>explore("Laptops & Computers")}/>
- <ProductSwiper title="PHONES & ACCESSORIES" subtitle="Smartphones, tablets and useful mobile accessories." products={phones} onAdd={addProduct} onExplore={()=>explore("Mobile Phones")}/>
- <ProductSwiper title="SOLAR PRODUCTS" subtitle="Solar panels, backup power and related accessories." products={solar} onAdd={addProduct} onExplore={()=>explore("Solar Panels & Power")}/>
- <div id="catalogue"><h2 className="heading">Full Product Catalogue</h2><p className="lead">Search the full catalogue or choose a category below.</p></div><div className="shop-bar"><input className="shop-input" type="search" value={search} onChange={e=>setSearch(e.target.value)} placeholder="Search products, categories and accessories..." aria-label="Search products"/><a className="btn dark" href="#cart">Enquiry List ({cartQuantity})</a></div><div className="category-scroll">{CATEGORIES.map(c=><button key={c} className={`category-btn ${activeCategory===c?"active":""}`} onClick={()=>setActiveCategory(c)} aria-pressed={activeCategory===c}>{c}</button>)}</div><div className="catalogue-meta"><span>{visibleProducts.length} products displayed</span><span>Prices are editable examples — confirm before publishing.</span></div>
- <div className="product-grid">{visibleProducts.map(p=><ProductCard key={p.id} product={p} onAdd={addProduct}/>)}{!visibleProducts.length&&<div className="empty">No matching products. Try another search or category.</div>}</div>
- <div className="cart-section" id="cart"><h3>Your Product Enquiry</h3><p className="cart-intro">Choose the items and quantities you want. Your list will be prepared in WhatsApp so Jaymart can confirm prices, availability and delivery details.</p>{notice&&<div className="notice" role="status">{notice}</div>}<div className="cart-layout"><div>{!cart.length?<div className="empty">Your enquiry list is empty. Add a product from the catalogue.</div>:cart.map(item=><div className="cart-item" key={item.id}><div><strong>{item.name}</strong><small>{item.category} · {money(item.price)} each (example)</small><div className="qty"><button aria-label={`Reduce ${item.name} quantity`} onClick={()=>setQuantity(item.id,item.quantity-1)}>−</button><strong>{item.quantity}</strong><button aria-label={`Increase ${item.name} quantity`} onClick={()=>setQuantity(item.id,item.quantity+1)}>+</button></div></div><button className="remove" onClick={()=>setCart(old=>old.filter(p=>p.id!==item.id))}>Remove</button></div>)}</div><form onSubmit={sendOrder}><div className="field"><label htmlFor="order-name">Full name *</label><input id="order-name" value={customer.name} onChange={e=>setCustomer({...customer,name:e.target.value})} placeholder="Your name" required/></div><div className="field"><label htmlFor="order-phone">Phone / WhatsApp *</label><input id="order-phone" type="tel" value={customer.phone} onChange={e=>setCustomer({...customer,phone:e.target.value})} placeholder="Your phone number" required/></div><div className="field"><label htmlFor="order-location">Delivery location</label><input id="order-location" value={customer.location} onChange={e=>setCustomer({...customer,location:e.target.value})} placeholder="City or delivery area"/></div><div className="field"><label htmlFor="order-message">Additional requirements</label><textarea id="order-message" value={customer.message} onChange={e=>setCustomer({...customer,message:e.target.value})} placeholder="Preferred brand, model, specifications or delivery details"/></div><button className="btn green full" type="submit">Send Enquiry on WhatsApp ↗</button><p className="note">WhatsApp opens with selected products and quantities. Press Send in WhatsApp; this is not an automatic payment or confirmed-order system.</p></form></div></div></div></section>
- <section className="section" id="carpentry"><div className="wrap"><div className="section-head"><p className="eyebrow">05 / Building Carpentry and Construction</p><h2 className="heading">Work you can see. Experience you can discuss.</h2><p className="lead">Almost 15 years of practical carpentry experience in roofing, decking and formwork, lintel and parapet formwork, ceilings, house boarding and other building-related timber work. This is construction carpentry, separate from furniture-making.</p></div><div className="gallery" onMouseEnter={()=>setPaused(true)} onMouseLeave={()=>setPaused(false)} onTouchStart={()=>setPaused(true)} onTouchEnd={()=>setPaused(false)}><div className="gallery-image" onTouchStart={e=>e.currentTarget.dataset.start=String(e.touches[0].clientX)} onTouchEnd={e=>{const d=e.changedTouches[0].clientX-Number(e.currentTarget.dataset.start||0);if(Math.abs(d)>45)moveSlide(d>0?-1:1)}}><Photo key={currentSlide.image} src={currentSlide.image} alt={currentSlide.title}/><button className="gallery-arrow left" aria-label="Previous carpentry project" onClick={()=>moveSlide(-1)}>‹</button><button className="gallery-arrow right" aria-label="Next carpentry project" onClick={()=>moveSlide(1)}>›</button><div className="gallery-caption"><small>Carpentry project {slide+1} / {CARPENTRY_GALLERY.length}</small><h3>{currentSlide.title}</h3><p>{currentSlide.description}</p></div></div><div className="gallery-bottom"><div className="gallery-controls"><button onClick={()=>moveSlide(-1)}>← Previous</button><button onClick={()=>setPaused(v=>!v)}>{paused?"▶ Resume Auto-Slide":"Ⅱ Pause Auto-Slide"}</button><button onClick={()=>moveSlide(1)}>Next →</button></div><div className="dots">{CARPENTRY_GALLERY.map((p,i)=><button key={p.image} className={slide===i?"active":""} aria-label={`Show ${p.title}`} onClick={()=>setSlide(i)}/>)}</div><span>{String(slide+1).padStart(2,"0")} / {String(CARPENTRY_GALLERY.length).padStart(2,"0")}</span></div></div>
- <div className="construction-services">{[["Roof carpentry","Roof framing, trusses and related timber work."],["Decking and formwork","Timber support and formwork for building construction."],["Lintel and parapet formwork","Carpentry and formwork coordinated with the construction team."],["Ceiling installation","Ceiling framing, supports and boarding."],["House boarding","Building boarding and related timber work."],["General carpentry contracting","Project scope discussion, site coordination and carpentry work."]].map(([t,d])=><div className="construction-service" key={t}><strong>{t}</strong><span>{d}</span></div>)}</div><div className="hero-buttons"><a className="btn primary" href={`https://wa.me/${SITE.whatsapp}?text=${encodeURIComponent("Hello, I would like to discuss a building carpentry project. I can share site photos, location and scope of work.")}`} target="_blank" rel="noreferrer">Discuss a Carpentry Project ↗</a></div></div></section>
- <section className="section" id="content"><div className="wrap"><div className="section-head"><p className="eyebrow">06 / Technology Content</p><h2 className="heading">Making everyday technology easier to use.</h2><p className="lead">I share practical technology tutorials and digital content, including computer features and Windows tips. Explore my public channels for videos and updates.</p></div><div className="content-banner"><div><h3>Jaymart Computers on YouTube</h3><p>Add favourite video thumbnails and direct tutorial links here as your content library grows.</p></div><a className="btn primary" href={SITE.youtube} target="_blank" rel="noreferrer">Visit YouTube ↗</a></div><div className="socials"><a href={SITE.youtube} target="_blank" rel="noreferrer">YouTube ↗</a><a href={SITE.facebook} target="_blank" rel="noreferrer">Facebook ↗</a><a href={SITE.instagram} target="_blank" rel="noreferrer">Instagram ↗</a><a href={SITE.tiktok} target="_blank" rel="noreferrer">TikTok ↗</a></div></div></section>
- <section className="section" id="contact"><div className="wrap"><div className="section-head"><p className="eyebrow">07 / Contact</p><h2 className="heading">Have a project or product in mind?</h2><p className="lead">Contact me about websites, digital content, computers and accessories, mobile phones, solar products or construction carpentry.</p></div><div className="contact-grid"><div><div className="contact-list"><div className="contact-item"><strong>Location</strong><span>{SITE.location}</span></div><div className="contact-item"><strong>Email</strong><a href={`mailto:${SITE.email}`}>{SITE.email}</a></div><div className="contact-item"><strong>Phone</strong><a href="tel:+2348156015526">{SITE.phone}</a></div><div className="contact-item"><strong>WhatsApp</strong><a href={`https://wa.me/${SITE.whatsapp}`} target="_blank" rel="noreferrer">Start a conversation ↗</a></div></div><div className="socials"><a href={SITE.github} target="_blank" rel="noreferrer">GitHub</a><a href={SITE.linkedin} target="_blank" rel="noreferrer">LinkedIn</a><a href={SITE.facebook} target="_blank" rel="noreferrer">Facebook</a><a href={SITE.instagram} target="_blank" rel="noreferrer">Instagram</a></div></div><form className="contact-form" onSubmit={sendContact}><h3>Send a Message</h3><div className="field"><label htmlFor="contact-name">Your name *</label><input id="contact-name" value={contact.name} onChange={e=>setContact({...contact,name:e.target.value})} placeholder="Your name" required/></div><div className="field"><label htmlFor="contact-email">Email address *</label><input id="contact-email" type="email" value={contact.email} onChange={e=>setContact({...contact,email:e.target.value})} placeholder="you@example.com" required/></div><div className="field"><label htmlFor="contact-message">How can I help? *</label><textarea id="contact-message" value={contact.message} onChange={e=>setContact({...contact,message:e.target.value})} placeholder="Tell me about your project, product or service enquiry." required/></div><button className="btn primary full" type="submit">Continue to WhatsApp ↗</button><p className="note">This prepares a message in WhatsApp. Press Send there to submit it.</p></form></div></div></section>
- </main><footer className="footer"><div className="wrap footer-row"><div><strong>{SITE.business}</strong><div>Digital services · Computers · Mobile · Solar · Carpentry</div></div><span>© {new Date().getFullYear()} Jaymart. All rights reserved.</span></div></footer><a className="float-wa" href={`https://wa.me/${SITE.whatsapp}?text=${encodeURIComponent("Hello Jaymart, I would like to make an enquiry.")}`} target="_blank" rel="noreferrer" aria-label="Contact Jaymart on WhatsApp" title="Chat with Jaymart">☎</a>
- </div>;
+  const isCatalogue = window.location.pathname.replace(/\/+$/,"") === "/catalogue";
+  const queryCategory = new URLSearchParams(window.location.search).get("category");
+  const initialCategory = CATEGORIES.includes(queryCategory) ? queryCategory : "All Products";
+
+  const [activeCategory,setActiveCategory] = useState(initialCategory);
+  const [search,setSearch] = useState("");
+  const [cart,setCart] = useState(readSavedCart);
+  const [slide,setSlide] = useState(0);
+  const [paused,setPaused] = useState(false);
+  const [mobileMenu,setMobileMenu] = useState(false);
+  const [notice,setNotice] = useState("");
+  const [customer,setCustomer] = useState({name:"",phone:"",location:"",message:""});
+  const [contact,setContact] = useState({name:"",email:"",message:""});
+
+  useEffect(() => {
+    localStorage.setItem("jaymart-enquiry-cart",JSON.stringify(cart));
+  },[cart]);
+
+  useEffect(() => {
+    if(paused) return;
+    const timer = window.setInterval(() => setSlide(i => (i+1)%CARPENTRY_GALLERY.length),4500);
+    return () => window.clearInterval(timer);
+  },[paused]);
+
+  const visibleProducts = PRODUCTS.filter(p =>
+    (activeCategory==="All Products" || p.category===activeCategory) &&
+    (!search.trim() || `${p.name} ${p.description} ${p.category}`.toLowerCase().includes(search.trim().toLowerCase()))
+  );
+  const cartQuantity = cart.reduce((sum,item) => sum+item.quantity,0);
+  const currentSlide = CARPENTRY_GALLERY[slide];
+  const computers = PRODUCTS.filter(p => ["Laptops & Computers","Computer Accessories"].includes(p.category)).slice(0,10);
+  const phones = PRODUCTS.filter(p => ["Mobile Phones","Phone Accessories"].includes(p.category)).slice(0,10);
+  const solar = PRODUCTS.filter(p => ["Solar Panels & Power","Solar Accessories"].includes(p.category)).slice(0,10);
+  const links = [["About","#about"],["Experience","#experience"],["Projects","#projects"],["Services","#services"],["Shop","#shop"],["Carpentry","#carpentry"],["Contact","#contact"]];
+
+  function addProduct(product) {
+    setCart(old => {
+      const item = old.find(p => p.id===product.id);
+      return item ? old.map(p => p.id===product.id ? {...p,quantity:p.quantity+1} : p) : [...old,{...product,quantity:1}];
+    });
+    setNotice(`${product.name} added to your enquiry list.`);
+  }
+
+  function setQuantity(id,quantity) {
+    setCart(old => old.map(p => p.id===id ? {...p,quantity} : p).filter(p => p.quantity>0));
+  }
+
+  function orderMessage() {
+    return [
+      `PRODUCT ENQUIRY — ${SITE.business}`,"",
+      "Hello Jaymart, please confirm the availability and final prices of these items:","",
+      ...cart.map((p,i) => `${i+1}. ${p.name}\n   Category: ${p.category}\n   Quantity: ${p.quantity}\n   Displayed price: ${money(p.price)} each (please confirm)`),
+      "",`Name: ${customer.name}`,`Phone: ${customer.phone}`,
+      `Location: ${customer.location||"Not supplied"}`,
+      `Additional requirements: ${customer.message||"None"}`,"",
+      "Please confirm current prices, specifications, warranty and delivery options before I complete my order."
+    ].join("\n");
+  }
+
+  function sendOrder(e) {
+    e.preventDefault();
+    if(!cart.length) { setNotice("Add at least one product to your enquiry list."); return; }
+    if(!customer.name.trim() || !customer.phone.trim()) { setNotice("Enter your name and phone number to continue."); return; }
+    window.open(`https://wa.me/${SITE.whatsapp}?text=${encodeURIComponent(orderMessage())}`,"_blank","noopener,noreferrer");
+    setNotice("Review the prepared WhatsApp message and press Send.");
+  }
+
+  function sendContact(e) {
+    e.preventDefault();
+    if(!contact.name.trim() || !contact.email.trim() || !contact.message.trim()) {
+      setNotice("Complete your name, email and message.");
+      return;
+    }
+    window.open(`https://wa.me/${SITE.whatsapp}?text=${encodeURIComponent(`Name: ${contact.name}\nEmail: ${contact.email}\n\n${contact.message}`)}`,"_blank","noopener,noreferrer");
+  }
+
+  function explore(category) {
+    window.location.href = `/catalogue?category=${encodeURIComponent(category)}`;
+  }
+
+  function enquiryForm() {
+    return <div className="cart-section" id="cart">
+      <h3>Your Product Enquiry</h3>
+      <p className="cart-intro">Choose items and quantities. Your list will be prepared in WhatsApp so Jaymart can confirm prices, availability and delivery details.</p>
+      {notice && <div className="notice" role="status">{notice}</div>}
+      <div className="cart-layout">
+        <div>
+          {!cart.length
+            ? <div className="empty">Your enquiry list is empty. Add a product from one of the featured sections or the full catalogue.</div>
+            : cart.map(item => <div className="cart-item" key={item.id}>
+              <div><strong>{item.name}</strong><small>{item.category} · {money(item.price)} each (example)</small>
+                <div className="qty">
+                  <button aria-label={`Reduce ${item.name} quantity`} onClick={() => setQuantity(item.id,item.quantity-1)}>−</button>
+                  <strong>{item.quantity}</strong>
+                  <button aria-label={`Increase ${item.name} quantity`} onClick={() => setQuantity(item.id,item.quantity+1)}>+</button>
+                </div>
+              </div>
+              <button className="remove" onClick={() => setCart(old => old.filter(p => p.id!==item.id))}>Remove</button>
+            </div>)}
+        </div>
+        <form onSubmit={sendOrder}>
+          <div className="field"><label htmlFor="order-name">Full name *</label><input id="order-name" value={customer.name} onChange={e => setCustomer({...customer,name:e.target.value})} placeholder="Your name" required/></div>
+          <div className="field"><label htmlFor="order-phone">Phone / WhatsApp *</label><input id="order-phone" type="tel" value={customer.phone} onChange={e => setCustomer({...customer,phone:e.target.value})} placeholder="Your phone number" required/></div>
+          <div className="field"><label htmlFor="order-location">Delivery location</label><input id="order-location" value={customer.location} onChange={e => setCustomer({...customer,location:e.target.value})} placeholder="City or delivery area"/></div>
+          <div className="field"><label htmlFor="order-message">Additional requirements</label><textarea id="order-message" value={customer.message} onChange={e => setCustomer({...customer,message:e.target.value})} placeholder="Preferred brand, model, specifications or delivery details"/></div>
+          <button className="btn green full" type="submit">Send Enquiry on WhatsApp ↗</button>
+          <p className="note">WhatsApp opens with selected products and quantities. Press Send in WhatsApp. This is not an automatic payment or confirmed-order system.</p>
+        </form>
+      </div>
+    </div>;
+  }
+
+  function header() {
+    return <>
+      <header className="site-header">
+        <div className="wrap nav">
+          <a className="brand" href={isCatalogue?"/":"/#home"} onClick={() => setMobileMenu(false)}>
+            <span className="brand-mark">J</span>
+            <span><strong>JAYMART</strong><small>Computers &amp; Gadgetry Hub</small></span>
+          </a>
+          <button className="menu-button" onClick={() => setMobileMenu(v => !v)} aria-expanded={mobileMenu} aria-controls="site-drawer">{mobileMenu?"✕ Close":"☰ Explore"}</button>
+        </div>
+      </header>
+      {mobileMenu && <>
+        <button className="backdrop" aria-label="Close menu" onClick={() => setMobileMenu(false)}/>
+        <aside className="drawer" id="site-drawer">
+          <div className="drawer-top"><strong>Explore Jaymart</strong><button onClick={() => setMobileMenu(false)}>Close ✕</button></div>
+          <nav className="drawer-links">
+            {links.map(([name,href]) => <a href={isCatalogue?`/${href}`:href} key={href} onClick={() => setMobileMenu(false)}>{name} ↗</a>)}
+            <a href="/catalogue">Full Product Catalogue ↗</a>
+          </nav>
+          <p className="drawer-note">Computers, technology products, digital services and construction carpentry.</p>
+        </aside>
+      </>}
+    </>;
+  }
+
+  function footer() {
+    return <>
+      <footer className="footer"><div className="wrap footer-row">
+        <div><strong>{SITE.business}</strong><div>Digital services · Computers · Mobile · Solar · Carpentry</div></div>
+        <span>© {new Date().getFullYear()} Jaymart. All rights reserved.</span>
+      </div></footer>
+      <a className="float-wa" href={`https://wa.me/${SITE.whatsapp}?text=${encodeURIComponent("Hello Jaymart, I would like to make an enquiry.")}`} target="_blank" rel="noreferrer" aria-label="Contact Jaymart on WhatsApp" title="Chat with Jaymart">☎</a>
+    </>;
+  }
+
+  const styles = `
+    :root{--bg:#0b192b;--accent:#65f0d0;--line:#c6dcf321;--muted:#91a5bb;--shopbg:#f4f7fb}
+    html{scroll-behavior:smooth;scroll-padding-top:25px}
+    body{margin:0}
+    .jaymart{background:var(--bg);color:#e5edf7;line-height:1.65;font-family:Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;min-height:100vh}
+    .jaymart *{box-sizing:border-box}.jaymart a{color:inherit;text-decoration:none}
+    .jaymart button,.jaymart input,.jaymart textarea{font:inherit}
+    .jaymart button:focus-visible,.jaymart a:focus-visible,.jaymart input:focus-visible,.jaymart textarea:focus-visible{outline:3px solid var(--accent);outline-offset:3px}
+    .wrap{width:min(1240px,calc(100% - 44px));margin:auto}
+    .eyebrow{margin:0 0 10px;color:var(--accent);font:700 .74rem/1.4 ui-monospace,monospace;letter-spacing:.15em;text-transform:uppercase}
+    .heading{margin:0 0 18px;font-size:clamp(2rem,4vw,3rem);line-height:1.13;letter-spacing:-.045em;color:#eef5ff}
+    .lead{max-width:740px;margin:0;color:#a9bbcf}
+    .section{padding:84px 0;border-top:1px solid var(--line)}.section-head{max-width:790px;margin-bottom:34px}
+    .site-header{position:absolute;top:0;left:0;right:0;z-index:100;background:transparent;border:0}
+    .nav{min-height:76px;display:flex;align-items:center;justify-content:flex-end;gap:20px}
+    .brand{display:none!important}.menu-button{border:1px solid #ffffff65;border-radius:9px;background:#07142365;color:white;padding:10px 13px;cursor:pointer;backdrop-filter:blur(10px)}
+    .menu-button:hover{color:var(--accent);border-color:var(--accent)}
+    .backdrop{position:fixed;inset:0;z-index:140;border:0;background:#020812aa}
+    .drawer{position:fixed;z-index:150;right:0;top:0;bottom:0;width:min(360px,88vw);padding:25px;background:#09182a;border-left:1px solid var(--line);box-shadow:-24px 0 70px #0007;overflow:auto}
+    .drawer-top{display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid var(--line);padding-bottom:20px}
+    .drawer-top button{color:white;background:transparent;border:1px solid var(--line);padding:7px 10px;border-radius:8px}
+    .drawer-links{display:grid;margin-top:12px}.drawer-links a{padding:14px 2px;border-bottom:1px solid var(--line);color:#dce8f6}.drawer-links a:hover{color:var(--accent)}
+    .drawer-note{color:var(--muted);font-size:.84rem;margin-top:24px}
+    .hero{position:relative;isolation:isolate;padding:120px 0 68px;background:linear-gradient(90deg,rgba(5,15,28,.94),rgba(5,15,28,.77)),url("/IMG_3351.png") center/cover no-repeat;min-height:580px}
+    .hero-grid{display:grid;grid-template-columns:minmax(0,1fr) 250px;gap:45px;align-items:center}
+    .hero h1{margin:15px 0;font-size:clamp(2.7rem,6vw,5rem);line-height:1.02;letter-spacing:-.06em;color:#f3f7fc}
+    .hero h1 span{color:var(--accent)}.hero-title{color:#b5c8dc;font-size:1.15rem}.hero-copy{max-width:700px;color:#d0dce9}
+    .hero-buttons,.hero-social{display:flex;flex-wrap:wrap;gap:11px;margin-top:24px}.hero-social{gap:15px;color:#d0dce9;font-size:.82rem}.hero-social a:hover{color:var(--accent)}
+    .hero-aside{border-left:1px solid #ffffff35;padding-left:24px}.aside-label{color:var(--accent);font:700 .7rem ui-monospace,monospace}
+    .aside-link{display:block;padding:10px 0;border-bottom:1px solid #ffffff26;font-size:.85rem;color:#e2ebf5}.aside-link:after{content:" ↗";color:var(--accent)}
+    .btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;border:1px solid transparent;border-radius:9px;padding:11px 16px;font-weight:800;font-size:.86rem;cursor:pointer;transition:transform .22s,background .22s}
+    .btn:hover{transform:translateY(-2px)}.primary{color:#071829!important;background:var(--accent)}.outline{color:#e9f2ff!important;border-color:#e2f0ff47;background:transparent}.dark{color:white;background:#102238}.green{color:white;background:#128654}.full{width:100%}
+    .about-grid{display:block;max-width:900px}.about-copy p{color:#9fb2c8}.facts{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:22px}
+    .fact{padding:13px;border:1px solid var(--line);border-radius:10px}.fact strong,.fact span{display:block}.fact strong{font-size:.87rem}.fact span{color:var(--muted);font-size:.76rem}
+    .tags{display:flex;flex-wrap:wrap;gap:8px;margin-top:20px}.tag{padding:6px 9px;border:1px solid #65f0d02e;border-radius:5px;color:#bdece1;background:#65f0d00b;font:.75rem ui-monospace,monospace}
+    .experience-list{border-top:1px solid var(--line)}.experience-item{display:grid;grid-template-columns:125px 1fr;gap:20px;padding:22px 0;border-bottom:1px solid var(--line)}
+    .experience-date{color:#93a8bd;font:.76rem ui-monospace,monospace}.experience-item h3{margin:0 0 5px;font-size:1rem}.experience-item p{margin:0;color:#9fb2c8;font-size:.88rem}
+    .cards{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}.service-card{padding:21px;border:1px solid var(--line);border-radius:13px;background:#ffffff06}.service-card h3{margin:10px 0 7px;font-size:1rem}.service-card p{margin:0;color:#9fb2c8;font-size:.86rem}
+    .project-window{overflow:hidden;border-radius:14px}.project-track{display:flex;gap:16px;transform:translateX(calc(var(--index)*(-33.333% - 5.34px)));transition:transform .6s}
+    .project-card{flex:0 0 calc((100% - 32px)/3);overflow:hidden;border:1px solid var(--line);border-radius:13px;background:#0e2034}.project-image{aspect-ratio:16/10;background:#162b42;overflow:hidden}.project-image img{width:100%;height:100%;object-fit:cover}
+    .project-body{padding:18px}.project-body small,.project-body a{color:var(--accent)}.project-body h3{margin:7px 0}.project-body p{color:#9fb2c8;font-size:.85rem}.project-body a{font-size:.82rem;font-weight:800}
+    .swiper-foot{display:flex;align-items:center;justify-content:space-between;gap:14px;margin-top:17px;color:#9cb0c6;font:.75rem ui-monospace,monospace}.dots{display:flex;gap:7px}.dots button{width:8px;height:8px;border:0;border-radius:10px;background:#536a80;cursor:pointer}.dots button.active{width:23px;background:var(--accent)}
+    .arrows{display:flex;gap:8px}.arrows button{width:38px;height:38px;border:1px solid #8da7c43d;border-radius:50%;color:#eef6ff;background:#102238;cursor:pointer}.arrows button:hover{color:#071829;background:var(--accent)}
+    .shop-section{background:var(--shopbg);color:#142237}.shop-section .heading{color:#102238}.shop-section .lead{color:#607187}.shop-section .eyebrow{color:#126b92}
+    .featured{margin:30px 0 40px;padding:20px;border:1px solid #dce4ed;border-radius:15px;background:white;box-shadow:0 8px 28px #132a4608}
+    .featured-head{display:flex;align-items:center;justify-content:space-between;gap:15px;margin-bottom:15px}.featured-head .eyebrow{margin-bottom:3px}.muted{margin:0;color:#718196;font-size:.83rem}
+    .featured-window{overflow:hidden;padding:2px 1px 10px}.featured-track{display:flex;gap:12px;transform:translateX(calc(var(--index)*(-17% - 2px)));transition:transform .55s}
+    .featured-item{flex:0 0 calc((100% - 60px)/6);min-width:0}.featured-item .product-card{height:100%;box-shadow:none}.featured-item .product-image{aspect-ratio:1}.featured-item .product-info{padding:9px}
+    .featured-item .product-info h3{font-size:.82rem}.featured-item .product-info p{font-size:.71rem}.featured-item .price{font-size:.9rem}.featured-item .price-note{font-size:.62rem}.featured-item .btn{padding:8px 4px;font-size:.7rem}
+    .featured-foot{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;padding-top:14px;border-top:1px solid #e8edf3;color:#75849a;font-size:.77rem}
+    .explore{background:#102238;color:white}.explore:hover{background:#1768b5}
+    .shop-bar{display:grid;grid-template-columns:1fr auto;gap:13px;margin:22px 0 15px}.shop-input,.field input,.field textarea{width:100%;padding:12px;border:1px solid #d8e0ea;border-radius:8px;background:white;color:#14243a}
+    .category-scroll{display:flex;gap:8px;overflow-x:auto;padding:2px 0 13px}.category-btn{flex-shrink:0;padding:8px 12px;border:1px solid #d8e0ea;border-radius:6px;background:white;color:#41546b;font-size:.77rem;font-weight:750;cursor:pointer}.category-btn.active{background:#102238;color:white}
+    .catalogue-meta{display:flex;justify-content:space-between;gap:12px;margin:10px 0 18px;color:#62748a;font-size:.82rem}
+    .product-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px}.product-card{display:flex;flex-direction:column;min-width:0;overflow:hidden;border:1px solid #e0e6ee;border-radius:12px;background:white;color:#14243a;box-shadow:0 4px 15px #132a4609}
+    .product-image{position:relative;aspect-ratio:1/.88;overflow:hidden;background:#e9eef4}.product-image img{width:100%;height:100%;object-fit:cover;transition:transform .25s}.product-card:hover .product-image img{transform:scale(1.04)}
+    .stock{position:absolute;top:9px;left:9px;padding:4px 7px;border-radius:5px;color:#126441;background:#e3f8ec;font-size:.65rem;font-weight:800}.stock.out{color:#9e2929;background:#fff0f0}
+    .product-info{display:flex;flex:1;flex-direction:column;padding:13px}.product-info small{color:#58748f;font-size:.67rem;font-weight:800;text-transform:uppercase}.product-info h3{margin:7px 0;color:#14243a;font-size:.92rem;line-height:1.35}.product-info p{flex:1;margin:0 0 12px;color:#6b7b8d;font-size:.77rem}
+    .price{color:#0e263f;font-size:1.05rem}.price-note{margin:3px 0 11px;color:#8a98a8;font-size:.66rem}
+    .cart-section{margin-top:34px;padding:23px;border:1px solid #dce4ed;border-radius:13px;background:white;color:#142237}.cart-section h3{margin:0 0 8px}.cart-intro{margin:0 0 18px;color:#6b7b8d;font-size:.84rem}.cart-layout{display:grid;grid-template-columns:1fr 1fr;gap:26px}
+    .cart-item{display:grid;grid-template-columns:1fr auto;gap:12px;padding:12px 0;border-bottom:1px solid #e6ebf1}.cart-item strong{display:block;font-size:.86rem}.cart-item small{color:#75859a}
+    .qty{display:flex;align-items:center;gap:8px;margin-top:6px}.qty button{width:27px;height:27px;border:1px solid #dbe3ec;border-radius:6px;background:#f8fafc;color:#142237}
+    .remove{border:0;color:#a33131;background:transparent;cursor:pointer;font-size:.76rem}.empty{padding:25px 10px;border:1px dashed #d1dbe6;border-radius:10px;color:#728197;text-align:center}
+    .field{display:grid;gap:6px;margin-bottom:12px}.field label{color:#3e5269;font-size:.78rem;font-weight:800}.field textarea{min-height:88px;resize:vertical}
+    .notice{margin:12px 0;padding:11px 13px;border-radius:8px;color:#145c40;background:#e8f9f0;font-size:.82rem}.note{color:#718096;font-size:.74rem}
+    .gallery{overflow:hidden;border:1px solid var(--line);border-radius:16px;background:#071525}.gallery-image{position:relative;height:clamp(300px,58vw,650px);background:#12263c;touch-action:pan-y}.gallery-image>img{width:100%;height:100%;object-fit:cover}
+    .gallery-caption{position:absolute;bottom:0;left:0;right:0;padding:60px 24px 20px;background:linear-gradient(transparent,#030a13f0)}.gallery-caption small{color:var(--accent);font:.74rem ui-monospace,monospace}.gallery-caption h3{margin:5px 0;color:white;font-size:clamp(1.25rem,3vw,2rem)}.gallery-caption p{margin:0;color:#d1deed}
+    .gallery-arrow{position:absolute;top:50%;width:42px;height:42px;border:1px solid #ffffff59;border-radius:50%;color:white;background:#051220a6;font-size:1.4rem;transform:translateY(-50%);cursor:pointer}.gallery-arrow.left{left:12px}.gallery-arrow.right{right:12px}
+    .gallery-bottom{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;padding:13px 15px;border-top:1px solid var(--line)}.gallery-controls{display:flex;gap:7px}.gallery-controls button{padding:7px 9px;border:1px solid var(--line);border-radius:7px;color:#e2edf9;background:#102238;font-size:.76rem;cursor:pointer}
+    .construction-services{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:13px;margin-top:24px}.construction-service{padding:16px;border:1px solid var(--line);border-radius:10px}.construction-service strong,.construction-service span{display:block}.construction-service span{margin-top:5px;color:#9fb2c8;font-size:.79rem}
+    .content-banner{display:flex;justify-content:space-between;align-items:center;gap:24px;padding:24px;border:1px solid var(--line);border-radius:13px;background:#102238}.content-banner h3{margin:0 0 7px}.content-banner p{margin:0;color:#9fb2c8}
+    .socials{display:flex;flex-wrap:wrap;gap:9px;margin-top:20px}.socials a{padding:8px 10px;border:1px solid var(--line);border-radius:7px;color:#c5d4e6;font-size:.78rem}
+    .contact-grid{display:grid;grid-template-columns:.8fr 1.2fr;gap:34px}.contact-list{display:grid;gap:12px}.contact-item,.contact-form{padding:15px;border:1px solid var(--line);border-radius:10px}.contact-item strong,.contact-item a,.contact-item span{display:block}.contact-item a,.contact-item span{margin-top:5px;color:#9fb2c8;overflow-wrap:anywhere}
+    .contact-form{padding:22px;background:#ffffff06}.contact-form .field label{color:#bdcde0}.contact-form .field input,.contact-form .field textarea{border-color:var(--line);color:white;background:#0b192b}
+    .footer{padding:25px 0;border-top:1px solid var(--line);color:#8ea3b9;font-size:.78rem}.footer-row{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
+    .float-wa{position:fixed;right:18px;bottom:18px;z-index:80;width:52px;height:52px;display:grid;place-items:center;border-radius:50%;color:white!important;background:#15965c;box-shadow:0 8px 24px #0005;font-size:1.4rem}
+    .catalogue-page{padding-top:105px;min-height:80vh}.catalogue-page .section-head{margin-bottom:24px}
+    @media(max-width:1050px){.product-grid{grid-template-columns:repeat(3,minmax(0,1fr))}.featured-item{flex-basis:calc((100% - 36px)/4)}.featured-track{transform:translateX(calc(var(--index)*(-25% - 3px)))}}
+    @media(max-width:850px){.hero-grid,.cart-layout,.contact-grid{grid-template-columns:1fr}.hero-aside{border:0;padding:0}.hero-aside-inner{display:grid;grid-template-columns:1fr 1fr;gap:0 16px}.cards{grid-template-columns:repeat(2,minmax(0,1fr))}.section{padding:64px 0}.project-card{flex-basis:calc((100% - 16px)/2)}.project-track{transform:translateX(calc(var(--index)*(-50% - 8px)))}.featured-item{flex-basis:calc((100% - 24px)/3)}.featured-track{transform:translateX(calc(var(--index)*(-33.333% - 2px)))}}
+    @media(max-width:560px){.wrap{width:calc(100% - 28px)}.hero{padding:105px 0 50px}.hero h1{font-size:clamp(2.5rem,12vw,3.4rem)}.hero-buttons{flex-direction:column;align-items:stretch}.section{padding:52px 0}.cards,.construction-services{grid-template-columns:1fr}.product-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.product-info{padding:10px}.product-info h3{font-size:.82rem}.product-info p{font-size:.72rem}.product-info .btn{padding:8px 5px;font-size:.7rem}.shop-bar{grid-template-columns:1fr}.catalogue-meta{flex-direction:column;gap:3px}.cart-section{padding:15px}.experience-item{grid-template-columns:1fr;gap:6px}.facts{grid-template-columns:1fr 1fr}.gallery-image{height:380px}.gallery-caption{padding:55px 15px 17px}.gallery-caption p{font-size:.82rem}.content-banner{align-items:stretch;flex-direction:column;padding:18px}.project-card{flex-basis:100%}.project-track{transform:translateX(calc(var(--index)*-100%))}.swiper-foot{flex-wrap:wrap}.featured{padding:12px}.featured-item{flex-basis:calc((100% - 12px)/2)}.featured-track{transform:translateX(calc(var(--index)*(-50% - 2px)))}.featured-item .product-info p{display:none}.featured-item .product-info h3{font-size:.77rem}.featured-item .price{font-size:.82rem}.featured-item .btn{font-size:.65rem;padding:7px 3px}.featured-head{align-items:flex-start}.featured-head .arrows button{width:33px;height:33px}.featured-foot{font-size:.72rem}.contact-form{padding:15px}}
+    @media(prefers-reduced-motion:reduce){*,*::before,*::after{scroll-behavior:auto!important;transition-duration:.01ms!important;animation-duration:.01ms!important}}
+  `;
+
+  return <div className="jaymart">
+    <style>{styles}</style>
+    {header()}
+
+    {isCatalogue ? <main className="catalogue-page">
+      <section className="section shop-section">
+        <div className="wrap">
+          <div className="section-head">
+            <p className="eyebrow">JAYMART ONLINE SHOP</p>
+            <h1 className="heading">Full Product Catalogue</h1>
+            <p className="lead">Browse computers, phones, accessories, networking equipment, solar products and power accessories. Add products to your enquiry list to request a confirmed quote.</p>
+          </div>
+          <div className="shop-bar">
+            <input className="shop-input" type="search" value={search} onChange={e => setSearch(e.target.value)} placeholder="Search products, categories and accessories..." aria-label="Search products"/>
+            <a className="btn dark" href="#cart">Enquiry List ({cartQuantity})</a>
+          </div>
+          <div className="category-scroll">{CATEGORIES.map(c => <button key={c} className={`category-btn ${activeCategory===c?"active":""}`} onClick={() => setActiveCategory(c)} aria-pressed={activeCategory===c}>{c}</button>)}</div>
+          <div className="catalogue-meta"><span>{visibleProducts.length} products displayed</span><span>Prices are examples — confirm before ordering.</span></div>
+          <div className="product-grid">{visibleProducts.map(p => <ProductCard key={p.id} product={p} onAdd={addProduct}/>)}{!visibleProducts.length&&<div className="empty">No matching products. Try another search or category.</div>}</div>
+          {enquiryForm()}
+          <p className="note">Prices, stock, specifications, warranty and delivery must be confirmed by Jaymart before an order is finalised.</p>
+          <a className="btn dark" href="/">← Return to Homepage</a>
+        </div>
+      </section>
+    </main> : <main>
+      <section className="hero" id="home"><div className="wrap hero-grid">
+        <div>
+          <p className="eyebrow">Full-Stack Developer · Digital Professional</p>
+          <h1>Udotor John<br/><span>Itsenegbemhe.</span></h1>
+          <p className="hero-title">I build practical digital experiences for people and businesses.</p>
+          <p className="hero-copy">I’m a Computer Science graduate and full-stack web developer working with modern JavaScript technologies, APIs and databases. My professional work also spans website development, social media management, content management and technology education.</p>
+          <div className="hero-buttons"><a className="btn primary" href="#projects">Explore My Work ↘</a><a className="btn outline" href="#contact">Let's Talk</a></div>
+          <div className="hero-social"><a href={SITE.github} target="_blank" rel="noreferrer">GitHub ↗</a><a href={SITE.linkedin} target="_blank" rel="noreferrer">LinkedIn ↗</a><a href={SITE.youtube} target="_blank" rel="noreferrer">YouTube ↗</a></div>
+        </div>
+        <aside className="hero-aside"><p className="aside-label">ON THIS WEBSITE</p>{[["About me","#about"],["Experience","#experience"],["Selected work","#projects"],["Digital services","#services"],["Online shop","#shop"],["Building carpentry","#carpentry"]].map(([n,h]) => <a className="aside-link" href={h} key={h}>{n}</a>)}</aside>
+      </div></section>
+
+      <section className="section" id="about"><div className="wrap about-grid"><div className="about-copy">
+        <p className="eyebrow">01 / About</p><h2 className="heading">Technology, communication and practical problem-solving.</h2>
+        <p>I hold a B.Sc. in Computer Science from Ambrose Alli University, where I graduated magna cum laude. My technical background includes React, Next.js, JavaScript, Node.js, Express, MongoDB, APIs, AI integration and website hosting.</p>
+        <p>I also work in social media and content management, including practical technology content. Outside the digital space, I bring almost 15 years of carpentry experience focused on building construction, roofing and related timber work.</p>
+        <div className="facts"><div className="fact"><strong>B.Sc. Computer Science</strong><span>Ambrose Alli University</span></div><div className="fact"><strong>Web Development Training</strong><span>React, Node.js, MongoDB and JavaScript</span></div><div className="fact"><strong>Digital Content</strong><span>Social media and content management</span></div><div className="fact"><strong>Building Carpentry</strong><span>Roofing and construction-related woodwork</span></div></div>
+        <div className="tags">{SKILLS.map(s => <span className="tag" key={s}>{s}</span>)}</div>
+      </div></div></section>
+
+      <section className="section" id="experience"><div className="wrap">
+        <div className="section-head"><p className="eyebrow">02 / Experience and Background</p><h2 className="heading">The foundation behind my work.</h2><p className="lead">A combination of formal education, technical training, computer-based operational experience and practical work.</p></div>
+        <div className="experience-list">
+          <article className="experience-item"><div className="experience-date">Current</div><div><h3>Founder &amp; Chief Executive Officer — Jaymart Computers and Gadgetry Hub</h3><p>Leading a technology-focused business offering computers and accessories, mobile devices, solar products, digital services and online customer enquiries.</p></div></article>
+          <article className="experience-item"><div className="experience-date">2019 – 2020</div><div><h3>Web Development Industrial Trainee — Infinity Computer Tech</h3><p>Completed industrial training focused on web development, HTML, CSS, PHP fundamentals and website hosting.</p></div></article>
+          <article className="experience-item"><div className="experience-date">2011 – 2020</div><div><h3>Ad Hoc Staff / Computer Operator — INEC</h3><p>Supported computer-based operations during Continuous Voter Registration and election-related assignments.</p></div></article>
+          <article className="experience-item"><div className="experience-date">Education</div><div><h3>B.Sc. Computer Science — Ambrose Alli University</h3><p>Graduated in August 2021, magna cum laude.</p></div></article>
+          <article className="experience-item"><div className="experience-date">Practical work</div><div><h3>Building Carpentry and Construction Work</h3><p>Almost 15 years of carpentry experience in roofing, decking/formwork, ceilings, boarding and related building construction work.</p></div></article>
+        </div>
+      </div></section>
+
+      <section className="section" id="projects"><div className="wrap"><div className="section-head"><p className="eyebrow">03 / Selected Work</p><h2 className="heading">Work that shows how I think and build.</h2><p className="lead">Browse selected web development and technology content work. Replace image placeholders with screenshots from your actual projects when ready.</p></div><ProjectSwiper/></div></section>
+
+      <section className="section" id="services"><div className="wrap"><div className="section-head"><p className="eyebrow">04 / Services</p><h2 className="heading">Digital services for growing businesses.</h2><p className="lead">Practical services focused on building a professional online presence, improving customer communication and presenting products clearly.</p></div>
+        <div className="cards">{[["⌘","Website Design and Development","Responsive business websites, portfolio websites and service websites."],["⚙","Full-Stack Development","Frontend and backend development with JavaScript, React, Node.js, Express and MongoDB."],["📣","Social Media Management","Page management, content planning, publishing and audience engagement support."],["✍","Content Management","Organising and maintaining website content, product information and digital communications."],["🎬","Technology Content Creation","Practical computer tips, Windows tutorials and useful digital technology content."],["🧰","Computer Support","Computer troubleshooting, software setup, maintenance and practical technical assistance."]].map(([icon,title,desc]) => <article className="service-card" key={title}><span>{icon}</span><h3>{title}</h3><p>{desc}</p></article>)}</div>
+      </div></section>
+
+      <section className="section shop-section" id="shop"><div className="wrap">
+        <div className="section-head"><p className="eyebrow">JAYMART ONLINE SHOP</p><h2 className="heading">JAYMART COMPUTERS AND GADGETRY HUB</h2><p className="lead">Computers, mobile phones, accessories, audio devices, networking equipment, solar panels, solar fans, inverters, batteries and related power accessories. Add products to your enquiry list to request a confirmed quote.</p></div>
+        <ProductSwiper title="COMPUTERS & ACCESSORIES" subtitle="Computers, workstations and everyday essentials." products={computers} onAdd={addProduct} onExplore={() => explore("Laptops & Computers")}/>
+        <ProductSwiper title="PHONES & ACCESSORIES" subtitle="Smartphones, tablets and useful mobile accessories." products={phones} onAdd={addProduct} onExplore={() => explore("Mobile Phones")}/>
+        <ProductSwiper title="SOLAR PRODUCTS" subtitle="Solar panels, backup power and related accessories." products={solar} onAdd={addProduct} onExplore={() => explore("Solar Panels & Power")}/>
+        {enquiryForm()}
+        <div className="catalogue-link"><h3>Looking for something else?</h3><p>Browse all products, use the search field, and filter by category.</p><a className="btn dark" href="/catalogue">Explore Full Product Catalogue ↗</a></div>
+      </div></section>
+
+      <section className="section" id="carpentry"><div className="wrap">
+        <div className="section-head"><p className="eyebrow">05 / Building Carpentry and Construction</p><h2 className="heading">Work you can see. Experience you can discuss.</h2><p className="lead">Almost 15 years of practical carpentry experience in roofing, decking and formwork, lintel and parapet formwork, ceilings, house boarding and other building-related timber work. This is construction carpentry, separate from furniture-making.</p></div>
+        <div className="gallery" onMouseEnter={() => setPaused(true)} onMouseLeave={() => setPaused(false)} onTouchStart={() => setPaused(true)} onTouchEnd={() => setPaused(false)}>
+          <div className="gallery-image" onTouchStart={e => e.currentTarget.dataset.start=String(e.touches[0].clientX)} onTouchEnd={e => {const d=e.changedTouches[0].clientX-Number(e.currentTarget.dataset.start||0);if(Math.abs(d)>45)setSlide(i=>(i+(d>0?-1:1)+CARPENTRY_GALLERY.length)%CARPENTRY_GALLERY.length)}}>
+            <Photo key={currentSlide.image} src={currentSlide.image} alt={currentSlide.title}/>
+            <button className="gallery-arrow left" aria-label="Previous carpentry project" onClick={() => setSlide(i => (i-1+CARPENTRY_GALLERY.length)%CARPENTRY_GALLERY.length)}>‹</button>
+            <button className="gallery-arrow right" aria-label="Next carpentry project" onClick={() => setSlide(i => (i+1)%CARPENTRY_GALLERY.length)}>›</button>
+            <div className="gallery-caption"><small>Carpentry project {slide+1} / {CARPENTRY_GALLERY.length}</small><h3>{currentSlide.title}</h3><p>{currentSlide.description}</p></div>
+          </div>
+          <div className="gallery-bottom"><div className="gallery-controls">
+            <button onClick={() => setSlide(i => (i-1+CARPENTRY_GALLERY.length)%CARPENTRY_GALLERY.length)}>← Previous</button>
+            <button onClick={() => setPaused(v => !v)}>{paused?"▶ Resume Auto-Slide":"Ⅱ Pause Auto-Slide"}</button>
+            <button onClick={() => setSlide(i => (i+1)%CARPENTRY_GALLERY.length)}>Next →</button>
+          </div><div className="dots">{CARPENTRY_GALLERY.map((p,i) => <button key={p.image} className={slide===i?"active":""} aria-label={`Show ${p.title}`} onClick={() => setSlide(i)}/>)}</div><span>{String(slide+1).padStart(2,"0")} / {String(CARPENTRY_GALLERY.length).padStart(2,"0")}</span></div>
+        </div>
+        <div className="construction-services">{[["Roof carpentry","Roof framing, trusses and related timber work."],["Decking and formwork","Timber support and formwork for building construction."],["Lintel and parapet formwork","Carpentry and formwork coordinated with the construction team."],["Ceiling installation","Ceiling framing, supports and boarding."],["House boarding","Building boarding and related timber work."],["General carpentry contracting","Project scope discussion, site coordination and carpentry work."]].map(([t,d]) => <div className="construction-service" key={t}><strong>{t}</strong><span>{d}</span></div>)}</div>
+        <div className="hero-buttons"><a className="btn primary" href={`https://wa.me/${SITE.whatsapp}?text=${encodeURIComponent("Hello, I would like to discuss a building carpentry project. I can share site photos, location and scope of work.")}`} target="_blank" rel="noreferrer">Discuss a Carpentry Project ↗</a></div>
+      </div></section>
+
+      <section className="section" id="content"><div className="wrap"><div className="section-head"><p className="eyebrow">06 / Technology Content</p><h2 className="heading">Making everyday technology easier to use.</h2><p className="lead">I share practical technology tutorials and digital content, including computer features and Windows tips. Explore my public channels for videos and updates.</p></div>
+        <div className="content-banner"><div><h3>Jaymart Computers on YouTube</h3><p>Add favourite video thumbnails and direct tutorial links here as your content library grows.</p></div><a className="btn primary" href={SITE.youtube} target="_blank" rel="noreferrer">Visit YouTube ↗</a></div>
+        <div className="socials"><a href={SITE.youtube} target="_blank" rel="noreferrer">YouTube ↗</a><a href={SITE.facebook} target="_blank" rel="noreferrer">Facebook ↗</a><a href={SITE.instagram} target="_blank" rel="noreferrer">Instagram ↗</a><a href={SITE.tiktok} target="_blank" rel="noreferrer">TikTok ↗</a></div>
+      </div></section>
+
+      <section className="section" id="contact"><div className="wrap"><div className="section-head"><p className="eyebrow">07 / Contact</p><h2 className="heading">Have a project or product in mind?</h2><p className="lead">Contact me about websites, digital content, computers and accessories, mobile phones, solar products or construction carpentry.</p></div>
+        <div className="contact-grid"><div><div className="contact-list">
+          <div className="contact-item"><strong>Location</strong><span>{SITE.location}</span></div>
+          <div className="contact-item"><strong>Email</strong><a href={`mailto:${SITE.email}`}>{SITE.email}</a></div>
+          <div className="contact-item"><strong>Phone</strong><a href="tel:+2348156015526">{SITE.phone}</a></div>
+          <div className="contact-item"><strong>WhatsApp</strong><a href={`https://wa.me/${SITE.whatsapp}`} target="_blank" rel="noreferrer">Start a conversation ↗</a></div>
+        </div><div className="socials"><a href={SITE.github} target="_blank" rel="noreferrer">GitHub</a><a href={SITE.linkedin} target="_blank" rel="noreferrer">LinkedIn</a><a href={SITE.facebook} target="_blank" rel="noreferrer">Facebook</a><a href={SITE.instagram} target="_blank" rel="noreferrer">Instagram</a></div></div>
+        <form className="contact-form" onSubmit={sendContact}><h3>Send a Message</h3>
+          <div className="field"><label htmlFor="contact-name">Your name *</label><input id="contact-name" value={contact.name} onChange={e => setContact({...contact,name:e.target.value})} placeholder="Your name" required/></div>
+          <div className="field"><label htmlFor="contact-email">Email address *</label><input id="contact-email" type="email" value={contact.email} onChange={e => setContact({...contact,email:e.target.value})} placeholder="you@example.com" required/></div>
+          <div className="field"><label htmlFor="contact-message">How can I help? *</label><textarea id="contact-message" value={contact.message} onChange={e => setContact({...contact,message:e.target.value})} placeholder="Tell me about your project, product or service enquiry." required/></div>
+          <button className="btn primary full" type="submit">Continue to WhatsApp ↗</button><p className="note">This prepares a message in WhatsApp. Press Send there to submit it.</p>
+        </form></div>
+      </div></section>
+    </main>}
+
+    {footer()}
+  </div>;
 }
+
 createRoot(document.getElementById("root")).render(<React.StrictMode><App/></React.StrictMode>);
