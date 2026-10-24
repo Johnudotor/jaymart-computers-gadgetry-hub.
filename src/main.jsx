@@ -1,271 +1,599 @@
 
-import React, { useMemo, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { createRoot } from "react-dom/client";
 import "./styles.css";
 
 /*
-  JAYMART COMPUTERS AND GADGETRY HUB
-  Complete main.jsx replacement.
+ JAYMART COMPUTERS AND GADGETRY HUB
+ Replace all of src/main.jsx with this file.
 
-  IMAGE GUIDE:
-  1. Replace each image URL in PRODUCTS with your own product photos.
-  2. Replace the profile image placeholder in the About section with your portrait.
-  3. Add screenshots of real websites you have built in the Portfolio section.
-  4. Add photos of your roofing, ceiling, decking, lintel, parapet and other
-     construction/carpentry work in the Construction section.
-  5. Use clear, well-lit photos that you own or have permission to publish.
-
-  ORDER FLOW:
-  Customers add products to their enquiry list, enter quantities and contact
-  details, then send the list through WhatsApp for confirmation.
-  This is an enquiry system, not an automatic payment gateway.
+ IMPORTANT:
+ - Product prices below are EDITABLE EXAMPLES, not verified Jaymart prices.
+ - Replace them with your current selling prices before publishing.
+ - Product image paths point to public/images/.
+ - Add your own images with matching filenames, or edit the paths below.
+ - WhatsApp orders are enquiries; final price, availability and delivery
+   must be confirmed with the customer.
 */
 
-const BUSINESS = {
-  name: "Jaymart Computers and Gadgetry Hub",
-  shortName: "JAYMART",
+const SITE = {
+  name: "Udotor John Itsenegbemhe",
+  business: "Jaymart Computers and Gadgetry Hub",
+  location: "Benin City, Edo State, Nigeria",
   email: "johnudotor@gmail.com",
   phone: "+234 815 601 5526",
-  alternatePhone: "+234 810 467 5749",
   whatsapp: "2348104675749",
-  location: "Benin City, Edo State, Nigeria",
   github: "https://github.com/johnudotor",
   linkedin:
     "https://linkedin.com/in/udotor-john-itsenegbemhe-0a621678",
+  youtube: "https://youtube.com/@jaymartcomputers?si=Ii-PmG4jkO0yfgld",
   facebook: "https://www.facebook.com/share/1Emj7Tj3is/?mibextid=wwXIfr",
   instagram:
     "https://www.instagram.com/jaymartcomputers1?rpxt=ZXh2aGg4cDVsNGZ4&utm_source=qr",
-  youtube: "https://youtube.com/@jaymartcomputers?si=Ii-PmG4jkO0yfgld",
   tiktok: "https://www.tiktok.com/@jaymartcomputers",
 };
 
+const CATEGORIES = [
+  "All Products",
+  "Laptops & Computers",
+  "Computer Accessories",
+  "Mobile Phones",
+  "Phone Accessories",
+  "Audio & Wearables",
+  "Networking",
+  "Solar Panels & Power",
+  "Solar Accessories",
+  "Storage & Components",
+];
+
 /*
-  PRODUCT PHOTOS:
-  Replace image URLs with your own images.
-  Use a direct image URL or a path to an image placed in your public folder,
-  such as "/images/laptop.jpg".
-  Do not use a Google search results URL as an image source.
+ PRODUCT CATALOGUE
+ Price values are examples to edit.
+ Set image paths to your own photos in public/images/.
+ "available" can be changed to false when a product is out of stock.
 */
 const PRODUCTS = [
+  // COMPUTERS
   {
-    id: "laptop",
-    name: "Laptops and Notebooks",
-    category: "Computers",
-    description:
-      "Laptops for work, study, business, programming and everyday computing.",
-    image: "/images/laptop.jpg",
-    badge: "Computers",
+    id: "laptop-hp",
+    name: "HP Laptop",
+    category: "Laptops & Computers",
+    price: 450000,
+    image: "/images/hp-laptop.jpg",
+    description: "Laptop for office work, online learning, business and everyday computing. Edit with processor, RAM, storage and screen size.",
+    available: true,
+  },
+  {
+    id: "laptop-dell",
+    name: "Dell Laptop",
+    category: "Laptops & Computers",
+    price: 480000,
+    image: "/images/dell-laptop.jpg",
+    description: "Dell notebook for productivity, business and professional use. Add the exact model and specifications.",
+    available: true,
+  },
+  {
+    id: "laptop-lenovo",
+    name: "Lenovo Laptop",
+    category: "Laptops & Computers",
+    price: 420000,
+    image: "/images/lenovo-laptop.jpg",
+    description: "Laptop options for students, offices and home users. Replace this with the specific model and configuration.",
+    available: true,
+  },
+  {
+    id: "macbook",
+    name: "Apple MacBook",
+    category: "Laptops & Computers",
+    price: 850000,
+    image: "/images/macbook.jpg",
+    description: "MacBook for development, creative work and productivity. Specify chip, memory, storage and condition.",
+    available: true,
   },
   {
     id: "desktop",
-    name: "Desktop Computers",
-    category: "Computers",
-    description:
-      "Desktop systems and computer setups for offices, homes and businesses.",
+    name: "Desktop Computer",
+    category: "Laptops & Computers",
+    price: 350000,
     image: "/images/desktop-computer.jpg",
-    badge: "Computers",
+    description: "Desktop system for office, business, school or home use. Specify whether the monitor and peripherals are included.",
+    available: true,
   },
   {
     id: "monitor",
-    name: "Monitors and Displays",
-    category: "Accessories",
-    description:
-      "Displays for office work, productivity, entertainment and workstations.",
+    name: "Computer Monitor",
+    category: "Computer Accessories",
+    price: 125000,
     image: "/images/monitor.jpg",
-    badge: "Accessories",
+    description: "External display for workstations and home offices. Add screen size, resolution and connection types.",
+    available: true,
   },
   {
-    id: "keyboard-mouse",
-    name: "Keyboards and Mice",
-    category: "Accessories",
-    description:
-      "Wired and wireless input devices for everyday computing and work.",
-    image: "/images/keyboard-mouse.jpg",
-    badge: "Accessories",
+    id: "keyboard",
+    name: "USB Keyboard",
+    category: "Computer Accessories",
+    price: 12000,
+    image: "/images/keyboard.jpg",
+    description: "Wired keyboard for desktop computers and compatible devices.",
+    available: true,
   },
   {
-    id: "storage",
-    name: "Storage Devices",
-    category: "Accessories",
-    description:
-      "Flash drives, external storage and other data-storage accessories.",
-    image: "/images/storage-devices.jpg",
-    badge: "Accessories",
+    id: "wireless-keyboard",
+    name: "Wireless Keyboard",
+    category: "Computer Accessories",
+    price: 22000,
+    image: "/images/wireless-keyboard.jpg",
+    description: "Wireless keyboard for a cleaner desk setup. Specify layout and connection type.",
+    available: true,
   },
   {
-    id: "networking",
-    name: "Networking Accessories",
-    category: "Accessories",
-    description:
-      "Routers, network accessories and connectivity equipment.",
-    image: "/images/networking.jpg",
-    badge: "Accessories",
+    id: "mouse",
+    name: "Computer Mouse",
+    category: "Computer Accessories",
+    price: 8000,
+    image: "/images/mouse.jpg",
+    description: "Computer mouse for everyday navigation and productivity.",
+    available: true,
   },
   {
-    id: "smartphones",
-    name: "Mobile Phones",
+    id: "wireless-mouse",
+    name: "Wireless Mouse",
+    category: "Computer Accessories",
+    price: 15000,
+    image: "/images/wireless-mouse.jpg",
+    description: "Wireless mouse for laptops and compatible desktop systems.",
+    available: true,
+  },
+  {
+    id: "laptop-bag",
+    name: "Laptop Bag",
+    category: "Computer Accessories",
+    price: 18000,
+    image: "/images/laptop-bag.jpg",
+    description: "Protective laptop bag for carrying your computer and everyday accessories.",
+    available: true,
+  },
+  {
+    id: "laptop-stand",
+    name: "Laptop Stand",
+    category: "Computer Accessories",
+    price: 18000,
+    image: "/images/laptop-stand.jpg",
+    description: "Laptop stand for a more comfortable workstation setup.",
+    available: true,
+  },
+  {
+    id: "cooling-pad",
+    name: "Laptop Cooling Pad",
+    category: "Computer Accessories",
+    price: 22000,
+    image: "/images/cooling-pad.jpg",
+    description: "Laptop cooling pad. Check size and compatibility before ordering.",
+    available: true,
+  },
+  {
+    id: "usb-hub",
+    name: "USB-C Hub and Adapter",
+    category: "Computer Accessories",
+    price: 25000,
+    image: "/images/usb-c-hub.jpg",
+    description: "Multiport adapter for compatible laptops, tablets and devices.",
+    available: true,
+  },
+  {
+    id: "webcam",
+    name: "USB Webcam",
+    category: "Computer Accessories",
+    price: 28000,
+    image: "/images/webcam.jpg",
+    description: "External webcam for online meetings, classes and streaming.",
+    available: true,
+  },
+  {
+    id: "printer",
+    name: "Computer Printer",
+    category: "Computer Accessories",
+    price: 165000,
+    image: "/images/printer.jpg",
+    description: "Printer for home, office or business use. Specify model and print type.",
+    available: true,
+  },
+
+  // MOBILE PHONES
+  {
+    id: "iphone",
+    name: "Apple iPhone",
     category: "Mobile Phones",
-    description:
-      "Smartphones for communication, business, learning and entertainment.",
-    image: "/images/mobile-phones.jpg",
-    badge: "Mobile",
+    price: 750000,
+    image: "/images/iphone.jpg",
+    description: "iPhone models subject to availability. Enter the model, storage capacity, condition and SIM type.",
+    available: true,
   },
   {
-    id: "phone-accessories",
-    name: "Phone Accessories",
+    id: "samsung",
+    name: "Samsung Galaxy Phone",
     category: "Mobile Phones",
-    description:
-      "Phone chargers, cables, cases, screen protectors and other accessories.",
-    image: "/images/phone-accessories.jpg",
-    badge: "Mobile",
+    price: 450000,
+    image: "/images/samsung-phone.jpg",
+    description: "Samsung Galaxy smartphone. Specify the series, memory, storage and condition.",
+    available: true,
   },
   {
-    id: "power-bank",
-    name: "Power Banks and Chargers",
+    id: "tecno",
+    name: "TECNO Smartphone",
     category: "Mobile Phones",
-    description:
-      "Portable charging solutions and compatible charging accessories.",
+    price: 220000,
+    image: "/images/tecno-phone.jpg",
+    description: "TECNO smartphones for communication, entertainment and daily productivity.",
+    available: true,
+  },
+  {
+    id: "infinix",
+    name: "Infinix Smartphone",
+    category: "Mobile Phones",
+    price: 200000,
+    image: "/images/infinix-phone.jpg",
+    description: "Infinix smartphones. Add the exact model, RAM, storage and colour.",
+    available: true,
+  },
+  {
+    id: "itel",
+    name: "itel Smartphone",
+    category: "Mobile Phones",
+    price: 110000,
+    image: "/images/itel-phone.jpg",
+    description: "itel phones for everyday mobile use. Confirm model and availability.",
+    available: true,
+  },
+  {
+    id: "tablet",
+    name: "Tablet",
+    category: "Mobile Phones",
+    price: 250000,
+    image: "/images/tablet.jpg",
+    description: "Tablet options for learning, business, reading and entertainment.",
+    available: true,
+  },
+
+  // PHONE ACCESSORIES
+  {
+    id: "charger",
+    name: "Phone Charger and Adapter",
+    category: "Phone Accessories",
+    price: 12000,
+    image: "/images/phone-charger.jpg",
+    description: "Charging adapter. Confirm connector, output wattage and device compatibility.",
+    available: true,
+  },
+  {
+    id: "cable",
+    name: "USB Charging Cable",
+    category: "Phone Accessories",
+    price: 5000,
+    image: "/images/charging-cable.jpg",
+    description: "Charging and data cable. Select USB-C, Lightning or another compatible connector.",
+    available: true,
+  },
+  {
+    id: "powerbank",
+    name: "Power Bank",
+    category: "Phone Accessories",
+    price: 25000,
     image: "/images/power-bank.jpg",
-    badge: "Mobile",
+    description: "Portable charging for compatible phones and devices. Add capacity and output specifications.",
+    available: true,
   },
+  {
+    id: "phone-case",
+    name: "Phone Case and Cover",
+    category: "Phone Accessories",
+    price: 5000,
+    image: "/images/phone-case.jpg",
+    description: "Protective phone case. Specify the exact phone model for fit.",
+    available: true,
+  },
+  {
+    id: "screen-protector",
+    name: "Screen Protector",
+    category: "Phone Accessories",
+    price: 4000,
+    image: "/images/screen-protector.jpg",
+    description: "Screen protection for compatible phones. Confirm the model before ordering.",
+    available: true,
+  },
+  {
+    id: "car-charger",
+    name: "Car Phone Charger",
+    category: "Phone Accessories",
+    price: 10000,
+    image: "/images/car-charger.jpg",
+    description: "Vehicle charger for compatible phones and other USB-powered devices.",
+    available: true,
+  },
+  {
+    id: "selfie-stick",
+    name: "Selfie Stick and Phone Tripod",
+    category: "Phone Accessories",
+    price: 15000,
+    image: "/images/selfie-stick.jpg",
+    description: "Phone holder for selfies, video calls and content creation.",
+    available: true,
+  },
+  {
+    id: "phone-holder",
+    name: "Phone Holder",
+    category: "Phone Accessories",
+    price: 8000,
+    image: "/images/phone-holder.jpg",
+    description: "Desk or vehicle phone holder. Edit with the type you sell.",
+    available: true,
+  },
+  {
+    id: "memory-card",
+    name: "MicroSD Memory Card",
+    category: "Storage & Components",
+    price: 9000,
+    image: "/images/memory-card.jpg",
+    description: "Removable storage for supported phones, cameras and other devices. Specify capacity and speed class.",
+    available: true,
+  },
+  {
+    id: "flash-drive",
+    name: "USB Flash Drive",
+    category: "Storage & Components",
+    price: 8000,
+    image: "/images/flash-drive.jpg",
+    description: "Portable file storage. Choose the capacity and connector type.",
+    available: true,
+  },
+  {
+    id: "external-drive",
+    name: "External Hard Drive or SSD",
+    category: "Storage & Components",
+    price: 95000,
+    image: "/images/external-drive.jpg",
+    description: "External storage for backup and file transfer. Confirm capacity and drive type.",
+    available: true,
+  },
+
+  // AUDIO AND WEARABLES
+  {
+    id: "earbuds",
+    name: "Wireless Earbuds",
+    category: "Audio & Wearables",
+    price: 25000,
+    image: "/images/wireless-earbuds.jpg",
+    description: "Wireless earbuds for calls, music and everyday listening.",
+    available: true,
+  },
+  {
+    id: "headphones",
+    name: "Bluetooth Headphones",
+    category: "Audio & Wearables",
+    price: 35000,
+    image: "/images/headphones.jpg",
+    description: "Wireless headphones. Specify battery life, microphone and audio features.",
+    available: true,
+  },
+  {
+    id: "speaker",
+    name: "Portable Bluetooth Speaker",
+    category: "Audio & Wearables",
+    price: 28000,
+    image: "/images/bluetooth-speaker.jpg",
+    description: "Portable speaker for music and everyday entertainment.",
+    available: true,
+  },
+  {
+    id: "smartwatch",
+    name: "Smartwatch",
+    category: "Audio & Wearables",
+    price: 35000,
+    image: "/images/smartwatch.jpg",
+    description: "Smartwatch options. Confirm phone compatibility, features and strap size.",
+    available: true,
+  },
+  {
+    id: "microphone",
+    name: "USB or Wireless Microphone",
+    category: "Audio & Wearables",
+    price: 30000,
+    image: "/images/microphone.jpg",
+    description: "Microphone for content creation, streaming, calls or recording.",
+    available: true,
+  },
+
+  // NETWORKING
+  {
+    id: "router",
+    name: "Wi-Fi Router",
+    category: "Networking",
+    price: 35000,
+    image: "/images/router.jpg",
+    description: "Router for home, office and small-business internet connectivity.",
+    available: true,
+  },
+  {
+    id: "modem",
+    name: "Internet Modem",
+    category: "Networking",
+    price: 45000,
+    image: "/images/modem.jpg",
+    description: "Internet modem. Confirm network compatibility and SIM requirements.",
+    available: true,
+  },
+  {
+    id: "switch",
+    name: "Network Switch",
+    category: "Networking",
+    price: 30000,
+    image: "/images/network-switch.jpg",
+    description: "Network switch for connecting compatible wired devices.",
+    available: true,
+  },
+  {
+    id: "ethernet",
+    name: "Ethernet Cable",
+    category: "Networking",
+    price: 3000,
+    image: "/images/ethernet-cable.jpg",
+    description: "Ethernet cable for wired networking. Edit with length and cable category.",
+    available: true,
+  },
+
+  // SOLAR AND BACKUP POWER
   {
     id: "solar-panel",
-    name: "Solar Panels",
-    category: "Solar Products",
-    description:
-      "Solar panels for home, business and other power-system applications.",
-    image: "/images/solar-panels.jpg",
-    badge: "Solar",
+    name: "Solar Panel",
+    category: "Solar Panels & Power",
+    price: 95000,
+    image: "/images/solar-panel.jpg",
+    description: "Solar panel for compatible solar power systems. Specify wattage and panel type.",
+    available: true,
+  },
+  {
+    id: "solar-fan",
+    name: "Solar Fan",
+    category: "Solar Panels & Power",
+    price: 65000,
+    image: "/images/solar-fan.jpg",
+    description: "Solar-powered fan or compatible DC fan kit. Specify panel, battery and included accessories.",
+    available: true,
+  },
+  {
+    id: "solar-light",
+    name: "Solar Security Light",
+    category: "Solar Panels & Power",
+    price: 18000,
+    image: "/images/solar-security-light.jpg",
+    description: "Solar-powered outdoor lighting. Confirm brightness, battery and sensor features.",
+    available: true,
+  },
+  {
+    id: "solar-home-light",
+    name: "Solar Home Lighting Kit",
+    category: "Solar Panels & Power",
+    price: 45000,
+    image: "/images/solar-home-kit.jpg",
+    description: "Solar lighting kit for suitable household applications. Specify included lights and capacity.",
+    available: true,
   },
   {
     id: "inverter",
-    name: "Inverters and Power Systems",
-    category: "Solar Products",
-    description:
-      "Inverters and power-system components selected for your requirements.",
-    image: "/images/inverter.jpg",
-    badge: "Solar",
+    name: "Solar Inverter",
+    category: "Solar Panels & Power",
+    price: 250000,
+    image: "/images/solar-inverter.jpg",
+    description: "Inverter for a compatible solar or backup-power installation. Specify rated capacity and system voltage.",
+    available: true,
+  },
+  {
+    id: "hybrid-inverter",
+    name: "Hybrid Solar Inverter",
+    category: "Solar Panels & Power",
+    price: 450000,
+    image: "/images/hybrid-inverter.jpg",
+    description: "Hybrid inverter for compatible solar, battery and grid systems. Confirm technical requirements before purchase.",
+    available: true,
   },
   {
     id: "solar-battery",
-    name: "Solar Batteries",
-    category: "Solar Products",
-    description:
-      "Battery options for compatible solar and backup-power installations.",
-    image: "/images/solar-batteries.jpg",
-    badge: "Solar",
+    name: "Solar Battery",
+    category: "Solar Panels & Power",
+    price: 280000,
+    image: "/images/solar-battery.jpg",
+    description: "Battery for a compatible backup-power system. Specify chemistry, voltage and capacity.",
+    available: true,
   },
   {
-    id: "solar-accessories",
-    name: "Solar Accessories",
-    category: "Solar Products",
-    description:
-      "Charge controllers, cables, mounting accessories and related components.",
-    image: "/images/solar-accessories.jpg",
-    badge: "Solar",
-  },
-];
-
-const PRODUCT_CATEGORIES = [
-  "All Products",
-  "Computers",
-  "Accessories",
-  "Mobile Phones",
-  "Solar Products",
-];
-
-const WEB_SKILLS = [
-  "JavaScript",
-  "React",
-  "Next.js",
-  "HTML5",
-  "CSS3",
-  "Tailwind CSS",
-  "Node.js",
-  "Express",
-  "MongoDB",
-  "Mongoose",
-  "API Integration",
-  "AI Integration",
-  "GitHub",
-  "Website Hosting",
-];
-
-const DIGITAL_SERVICES = [
-  {
-    icon: "💻",
-    title: "Website Design and Development",
-    description:
-      "Professional, responsive websites for businesses, organisations, personal brands and service providers.",
+    id: "power-station",
+    name: "Portable Power Station",
+    category: "Solar Panels & Power",
+    price: 350000,
+    image: "/images/power-station.jpg",
+    description: "Portable energy storage for compatible devices and appliances. Add watt-hour and output ratings.",
+    available: true,
   },
   {
-    icon: "⚙️",
-    title: "Full-Stack Web Development",
-    description:
-      "Frontend and backend development using modern JavaScript technologies, APIs and databases.",
+    id: "solar-generator",
+    name: "Solar Generator Kit",
+    category: "Solar Panels & Power",
+    price: 300000,
+    image: "/images/solar-generator.jpg",
+    description: "Portable solar power kit. List exactly which panel, battery and charging accessories are included.",
+    available: true,
   },
   {
-    icon: "📱",
-    title: "Social Media Management",
-    description:
-      "Support for social media pages, content planning, publishing, brand consistency and audience engagement.",
+    id: "solar-controller",
+    name: "Solar Charge Controller",
+    category: "Solar Accessories",
+    price: 25000,
+    image: "/images/solar-controller.jpg",
+    description: "Charge controller for compatible solar panels and batteries. Specify controller type and rating.",
+    available: true,
   },
   {
-    icon: "🎬",
-    title: "Content Management and Creation",
-    description:
-      "Organising website and social content, developing useful technology content and presenting information clearly.",
+    id: "solar-cable",
+    name: "Solar DC Cable",
+    category: "Solar Accessories",
+    price: 5000,
+    image: "/images/solar-cable.jpg",
+    description: "Solar cable for compatible installations. Specify conductor size and length.",
+    available: true,
   },
   {
-    icon: "🧰",
-    title: "Computer Support and Maintenance",
-    description:
-      "Computer troubleshooting, software installation, system setup and practical technical support.",
+    id: "solar-connectors",
+    name: "Solar Connectors",
+    category: "Solar Accessories",
+    price: 3000,
+    image: "/images/solar-connectors.jpg",
+    description: "Solar connectors and compatible cable accessories for suitable systems.",
+    available: true,
   },
   {
-    icon: "🌐",
-    title: "Business Technology Support",
-    description:
-      "Practical advice on online business presence, website improvements and technology solutions for daily operations.",
-  },
-];
-
-const CONSTRUCTION_SERVICES = [
-  {
-    title: "Roof Carpentry and Roofing Works",
-    description:
-      "Roof timber framing, truss construction, roof framing and related carpentry work.",
-    image: "/images/roofing-work.jpg",
+    id: "solar-mounting",
+    name: "Solar Panel Mounting Kit",
+    category: "Solar Accessories",
+    price: 25000,
+    image: "/images/solar-mounting-kit.jpg",
+    description: "Mounting hardware for appropriate panel installations. Confirm roof type and compatibility.",
+    available: true,
   },
   {
-    title: "Decking and Formwork",
-    description:
-      "Carpentry work for decking and formwork, including preparation of timber supports and shuttering where required.",
-    image: "/images/decking-formwork.jpg",
+    id: "dc-fan",
+    name: "DC Fan for Solar Systems",
+    category: "Solar Accessories",
+    price: 22000,
+    image: "/images/dc-fan.jpg",
+    description: "DC fan for compatible solar or battery-powered systems. Confirm voltage and power requirements.",
+    available: true,
   },
   {
-    title: "Lintel and Parapet Formwork",
-    description:
-      "Timber formwork and carpentry associated with lintels and parapet construction, in coordination with the building team.",
-    image: "/images/lintel-parapet.jpg",
+    id: "solar-pump",
+    name: "Solar Water Pump",
+    category: "Solar Accessories",
+    price: 125000,
+    image: "/images/solar-water-pump.jpg",
+    description: "Solar water pump options for appropriate applications. Specify head, flow rate and power requirements.",
+    available: true,
   },
   {
-    title: "Ceiling Installation",
-    description:
-      "Ceiling framing, support structures, boarding and associated installation work.",
-    image: "/images/ceiling-work.jpg",
+    id: "solar-inverter-cable",
+    name: "Inverter Cable and Fuse Kit",
+    category: "Solar Accessories",
+    price: 18000,
+    image: "/images/inverter-cable-kit.jpg",
+    description: "Suitable cables, fuses and related connection accessories. Match ratings to the intended installation.",
+    available: true,
   },
   {
-    title: "House Boarding and Timber Work",
-    description:
-      "Boarding of houses and other building-related timber work as required by the project.",
-    image: "/images/house-boarding.jpg",
-  },
-  {
-    title: "General Carpentry and Contracting",
-    description:
-      "Building carpentry, site coordination and general contracting for carpentry-related construction work.",
-    image: "/images/carpentry-work.jpg",
+    id: "surge-protector",
+    name: "Surge Protection Device",
+    category: "Solar Accessories",
+    price: 18000,
+    image: "/images/surge-protector.jpg",
+    description: "Surge protection for compatible electrical and solar installations. Verify specifications with an installer.",
+    available: true,
   },
 ];
 
@@ -273,117 +601,148 @@ const PROJECTS = [
   {
     title: "Personal Portfolio Website",
     type: "Web Development",
-    description:
-      "A portfolio website designed to present development skills, selected work and professional information.",
     image: "/images/project-portfolio.jpg",
-    link: BUSINESS.github,
+    description:
+      "A personal website for presenting technical skills, professional background and project work.",
+    link: SITE.github,
   },
   {
-    title: "Business Website Development",
+    title: "Business Website",
     type: "Web Development",
+    image: "/images/project-business.jpg",
     description:
-      "Responsive website experiences focused on clear service information, usability and customer enquiries.",
-    image: "/images/project-business-website.jpg",
-    link: BUSINESS.github,
+      "Business-focused web experiences with clear service information and customer enquiry pathways.",
+    link: SITE.github,
   },
   {
-    title: "Technology Content",
-    type: "Content and Social Media",
-    description:
-      "Practical technology content that helps people understand computer features, software and everyday digital tools.",
+    title: "Technology Tutorials",
+    type: "Content Creation",
     image: "/images/project-tech-content.jpg",
-    link: BUSINESS.youtube,
+    description:
+      "Practical technology content covering computer features, software and useful digital tools.",
+    link: SITE.youtube,
   },
 ];
 
-/* ---------- Reusable components ---------- */
+/*
+ CARPENTRY GALLERY:
+ Add your own photographs to public/images/carpentry/.
+ Replace each path below with your actual filename.
+ Keep landscape photos where possible so the large gallery looks professional.
+*/
+const CARPENTRY_GALLERY = [
+  {
+    image: "/images/carpentry/roofing-1.jpg",
+    title: "Roof Carpentry",
+    description: "Roof framing, timber work and roofing project.",
+  },
+  {
+    image: "/images/carpentry/decking-1.jpg",
+    title: "Decking and Formwork",
+    description: "Decking carpentry and formwork for a building project.",
+  },
+  {
+    image: "/images/carpentry/ceiling-1.jpg",
+    title: "Ceiling Installation",
+    description: "Ceiling framework, boarding and related carpentry.",
+  },
+  {
+    image: "/images/carpentry/lintel-1.jpg",
+    title: "Lintel Formwork",
+    description: "Timber formwork associated with lintel construction.",
+  },
+  {
+    image: "/images/carpentry/parapet-1.jpg",
+    title: "Parapet Work",
+    description: "Carpentry and formwork associated with parapet construction.",
+  },
+  {
+    image: "/images/carpentry/boarding-1.jpg",
+    title: "House Boarding",
+    description: "Boarding and building-related timber work.",
+  },
+  {
+    image: "/images/carpentry/site-1.jpg",
+    title: "Construction Site",
+    description: "A building project showing completed or ongoing carpentry work.",
+  },
+];
 
-function SectionHeading({ eyebrow, title, description, centered = false }) {
-  return (
-    <div className={`section-heading ${centered ? "centered" : ""}`}>
-      {eyebrow && <p className="eyebrow">{eyebrow}</p>}
-      <h2>{title}</h2>
-      {description && <p className="section-description">{description}</p>}
-    </div>
-  );
-}
+const SKILLS = [
+  "JavaScript", "React", "Next.js", "HTML5", "CSS3",
+  "Tailwind CSS", "Node.js", "Express", "MongoDB",
+  "Mongoose", "API Integration", "AI Integration",
+  "GitHub", "Website Hosting",
+];
 
-function ImagePlaceholder({ src, alt, className = "" }) {
-  const [failed, setFailed] = useState(false);
-
-  return (
-    <div className={`image-placeholder ${className}`}>
-      {!failed && src ? (
-        <img
-          src={src}
-          alt={alt}
-          loading="lazy"
-          onError={() => setFailed(true)}
-        />
-      ) : (
-        <div className="image-fallback">
-          <span aria-hidden="true">▧</span>
-          <span>{alt}</span>
-          <small>Replace with your photo</small>
-        </div>
-      )}
-    </div>
-  );
-}
-
-function WhatsAppLink({ children, message = "Hello Jaymart, I would like to make an enquiry." }) {
-  const url = `https://wa.me/${BUSINESS.whatsapp}?text=${encodeURIComponent(message)}`;
-
-  return (
-    <a href={url} target="_blank" rel="noreferrer" className="btn btn-whatsapp">
-      {children}
-    </a>
-  );
-}
+const money = (value) =>
+  new Intl.NumberFormat("en-NG", {
+    style: "currency",
+    currency: "NGN",
+    maximumFractionDigits: 0,
+  }).format(value);
 
 function App() {
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [activeCategory, setActiveCategory] = useState("All Products");
-  const [searchTerm, setSearchTerm] = useState("");
-  const [enquiryItems, setEnquiryItems] = useState([]);
-  const [customerName, setCustomerName] = useState("");
-  const [customerPhone, setCustomerPhone] = useState("");
-  const [customerLocation, setCustomerLocation] = useState("");
-  const [customerMessage, setCustomerMessage] = useState("");
-  const [enquiryNotice, setEnquiryNotice] = useState("");
-  const [contactName, setContactName] = useState("");
-  const [contactEmail, setContactEmail] = useState("");
-  const [contactSubject, setContactSubject] = useState("");
-  const [contactMessage, setContactMessage] = useState("");
-  const [contactNotice, setContactNotice] = useState("");
+  const [search, setSearch] = useState("");
+  const [cart, setCart] = useState([]);
+  const [slide, setSlide] = useState(0);
+  const [paused, setPaused] = useState(false);
+  const [mobileMenu, setMobileMenu] = useState(false);
+  const [customer, setCustomer] = useState({
+    name: "",
+    phone: "",
+    location: "",
+    message: "",
+  });
+  const [notice, setNotice] = useState("");
+  const [contact, setContact] = useState({
+    name: "",
+    email: "",
+    message: "",
+  });
 
-  const filteredProducts = useMemo(() => {
-    const query = searchTerm.trim().toLowerCase();
+  const visibleProducts = PRODUCTS.filter((product) => {
+    const categoryMatch =
+      activeCategory === "All Products" ||
+      product.category === activeCategory;
 
-    return PRODUCTS.filter((product) => {
-      const matchesCategory =
-        activeCategory === "All Products" ||
-        product.category === activeCategory;
+    const term = search.trim().toLowerCase();
+    const searchMatch =
+      !term ||
+      product.name.toLowerCase().includes(term) ||
+      product.description.toLowerCase().includes(term) ||
+      product.category.toLowerCase().includes(term);
 
-      const matchesSearch =
-        !query ||
-        product.name.toLowerCase().includes(query) ||
-        product.description.toLowerCase().includes(query) ||
-        product.category.toLowerCase().includes(query);
+    return categoryMatch && searchMatch;
+  });
 
-      return matchesCategory && matchesSearch;
-    });
-  }, [activeCategory, searchTerm]);
+  const cartQuantity = cart.reduce((sum, item) => sum + item.quantity, 0);
+  const currentSlide = CARPENTRY_GALLERY[slide];
 
-  const enquiryCount = enquiryItems.reduce(
-    (total, item) => total + item.quantity,
-    0
-  );
+  // Automatic carpentry gallery; pause while hovered or when manually paused.
+  useEffect(() => {
+    if (paused || CARPENTRY_GALLERY.length < 2) return undefined;
 
-  function addToEnquiry(product) {
-    setEnquiryItems((current) => {
+    const timer = window.setInterval(() => {
+      setSlide((current) => (current + 1) % CARPENTRY_GALLERY.length);
+    }, 4500);
+
+    return () => window.clearInterval(timer);
+  }, [paused]);
+
+  function moveSlide(direction) {
+    setSlide((current) =>
+      (current + direction + CARPENTRY_GALLERY.length) %
+      CARPENTRY_GALLERY.length
+    );
+  }
+
+  function addProduct(product) {
+    if (!product.available) return;
+
+    setCart((current) => {
       const existing = current.find((item) => item.id === product.id);
-
       if (existing) {
         return current.map((item) =>
           item.id === product.id
@@ -391,592 +750,447 @@ function App() {
             : item
         );
       }
-
       return [...current, { ...product, quantity: 1 }];
     });
 
-    setEnquiryNotice(`${product.name} added to your enquiry list.`);
-    window.setTimeout(() => setEnquiryNotice(""), 3000);
+    setNotice(`${product.name} added to your enquiry list.`);
   }
 
-  function changeQuantity(productId, amount) {
-    setEnquiryItems((current) =>
+  function setQuantity(id, quantity) {
+    setCart((current) =>
       current
         .map((item) =>
-          item.id === productId
-            ? { ...item, quantity: item.quantity + amount }
-            : item
+          item.id === id ? { ...item, quantity } : item
         )
         .filter((item) => item.quantity > 0)
     );
   }
 
-  function removeFromEnquiry(productId) {
-    setEnquiryItems((current) =>
-      current.filter((item) => item.id !== productId)
-    );
+  function removeProduct(id) {
+    setCart((current) => current.filter((item) => item.id !== id));
   }
 
-  function createOrderMessage() {
-    const itemsText = enquiryItems
-      .map(
-        (item, index) =>
-          `${index + 1}. ${item.name}\n   Category: ${item.category}\n   Quantity: ${item.quantity}`
-      )
-      .join("\n\n");
+  function orderMessage() {
+    const lines = cart.map(
+      (item, index) =>
+        `${index + 1}. ${item.name}\n   Category: ${item.category}\n   Quantity: ${item.quantity}\n   Displayed price: ${money(item.price)} each (please confirm)`
+    );
 
     return [
-      `PRODUCT ENQUIRY — ${BUSINESS.name}`,
+      `PRODUCT ENQUIRY — ${SITE.business}`,
       "",
-      "Hello Jaymart, I would like to enquire about the following items:",
+      "Hello Jaymart, please confirm the availability and final prices of these items:",
       "",
-      itemsText,
+      ...lines,
       "",
-      "CUSTOMER DETAILS",
-      `Name: ${customerName || "Not provided"}`,
-      `Phone: ${customerPhone || "Not provided"}`,
-      `Location: ${customerLocation || "Not provided"}`,
-      `Additional requirements: ${customerMessage || "None provided"}`,
+      `Name: ${customer.name}`,
+      `Phone: ${customer.phone}`,
+      `Location: ${customer.location || "Not supplied"}`,
+      `Additional requirements: ${customer.message || "None"}`,
       "",
-      "Please confirm availability, current prices, product specifications and delivery or collection options.",
+      "Please confirm current prices, specifications, warranty and delivery options before I complete my order.",
     ].join("\n");
   }
 
-  function sendProductEnquiry(event) {
+  function sendOrder(event) {
     event.preventDefault();
 
-    if (enquiryItems.length === 0) {
-      setEnquiryNotice("Please add at least one product before sending.");
+    if (cart.length === 0) {
+      setNotice("Add at least one product to your enquiry list.");
       return;
     }
 
-    if (!customerName.trim() || !customerPhone.trim()) {
-      setEnquiryNotice("Please enter your name and phone number.");
+    if (!customer.name.trim() || !customer.phone.trim()) {
+      setNotice("Enter your name and phone number to continue.");
       return;
     }
 
-    const message = createOrderMessage();
-    const url = `https://wa.me/${BUSINESS.whatsapp}?text=${encodeURIComponent(message)}`;
-
+    const url = `https://wa.me/${SITE.whatsapp}?text=${encodeURIComponent(orderMessage())}`;
     window.open(url, "_blank", "noopener,noreferrer");
-    setEnquiryNotice(
-      "Your enquiry has been prepared in WhatsApp. Review it and press Send there."
-    );
+    setNotice("Review the prepared WhatsApp message and press Send.");
   }
 
-  function sendGeneralContact(event) {
+  function sendContact(event) {
     event.preventDefault();
 
-    if (
-      !contactName.trim() ||
-      !contactEmail.trim() ||
-      !contactMessage.trim()
-    ) {
-      setContactNotice("Please complete your name, email and message.");
+    if (!contact.name.trim() || !contact.email.trim() || !contact.message.trim()) {
+      setNotice("Complete your name, email and message.");
       return;
     }
 
-    const message = [
-      `Hello, my name is ${contactName}.`,
-      `Email: ${contactEmail}`,
-      `Subject: ${contactSubject || "General enquiry"}`,
+    const text = [
+      `Name: ${contact.name}`,
+      `Email: ${contact.email}`,
       "",
-      contactMessage,
+      contact.message,
     ].join("\n");
 
-    const url = `https://wa.me/${BUSINESS.whatsapp}?text=${encodeURIComponent(message)}`;
-
-    window.open(url, "_blank", "noopener,noreferrer");
-    setContactNotice(
-      "Your message has been prepared in WhatsApp. Press Send to contact Jaymart."
+    window.open(
+      `https://wa.me/${SITE.whatsapp}?text=${encodeURIComponent(text)}`,
+      "_blank",
+      "noopener,noreferrer"
     );
   }
 
-  const closeMobileMenu = () => setMobileMenuOpen(false);
+  const closeMenu = () => setMobileMenu(false);
 
   return (
-    <>
+    <div className="jaymart">
       <style>{`
         :root {
-          --navy: #081426;
-          --navy-2: #101f35;
-          --blue: #1c76d2;
-          --cyan: #42d5e8;
-          --ink: #172438;
-          --muted: #65738a;
-          --paper: #f5f8fc;
-          --white: #ffffff;
-          --border: #e0e7f0;
-          --green: #15965c;
-          --radius: 18px;
-          --shadow: 0 14px 40px rgba(8, 20, 38, .09);
+          --bg: #0b192b;
+          --panel: #102238;
+          --text: #e5edf7;
+          --muted: #91a5bb;
+          --accent: #65f0d0;
+          --line: rgba(198,220,243,.13);
+          --white: #fff;
+          --ink: #142237;
+          --shopbg: #f4f7fb;
+          --blue: #1768b5;
+          --green: #128654;
         }
-
         * { box-sizing: border-box; }
-        html { scroll-behavior: smooth; scroll-padding-top: 90px; }
-        body {
-          margin: 0;
-          color: var(--ink);
-          background: var(--white);
-          font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-          line-height: 1.65;
+        html { scroll-behavior: smooth; scroll-padding-top: 85px; }
+        body { margin: 0; font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }
+        .jaymart { color: var(--text); background: var(--bg); line-height: 1.65; }
+        .jaymart a { color: inherit; text-decoration: none; }
+        .jaymart button, .jaymart input, .jaymart textarea { font: inherit; }
+        .jaymart button, .jaymart a { -webkit-tap-highlight-color: transparent; }
+        .jaymart button:focus-visible, .jaymart a:focus-visible, .jaymart input:focus-visible, .jaymart textarea:focus-visible {
+          outline: 3px solid var(--accent); outline-offset: 3px;
         }
-        body, button, input, textarea, select { font-family: inherit; }
-        a { color: inherit; text-decoration: none; }
-        img { display: block; max-width: 100%; }
-        button, input, textarea { font: inherit; }
-        button, a { -webkit-tap-highlight-color: transparent; }
-        button { cursor: pointer; }
-        button:focus-visible, a:focus-visible, input:focus-visible, textarea:focus-visible {
-          outline: 3px solid rgba(66, 213, 232, .8);
-          outline-offset: 3px;
-        }
-        .container { width: min(1160px, calc(100% - 40px)); margin: 0 auto; }
-        .section { padding: 88px 0; }
-        .section-soft { background: var(--paper); }
-        .section-dark { background: var(--navy); color: var(--white); }
-        .eyebrow {
-          margin: 0 0 12px;
-          color: var(--blue);
-          font-size: .76rem;
-          font-weight: 850;
-          letter-spacing: .16em;
-          text-transform: uppercase;
-        }
-        .section-dark .eyebrow { color: var(--cyan); }
-        .section-heading { max-width: 760px; margin-bottom: 34px; }
-        .section-heading.centered { margin-left: auto; margin-right: auto; text-align: center; }
-        .section-heading h2 {
-          margin: 0;
-          color: var(--navy);
-          font-size: clamp(2rem, 4vw, 3rem);
-          line-height: 1.13;
-          letter-spacing: -.045em;
-        }
-        .section-dark .section-heading h2 { color: var(--white); }
-        .section-description { margin: 16px 0 0; color: var(--muted); font-size: 1.02rem; }
-        .section-dark .section-description { color: #c0cddd; }
-        .site-header {
-          position: sticky; top: 0; z-index: 50;
-          background: rgba(8, 20, 38, .96);
-          border-bottom: 1px solid rgba(255,255,255,.09);
-          backdrop-filter: blur(16px);
-        }
-        .nav-row { min-height: 76px; display: flex; align-items: center; justify-content: space-between; gap: 24px; }
-        .brand { display: inline-flex; align-items: center; gap: 11px; color: white; flex-shrink: 0; }
-        .brand-mark {
-          display: grid; place-items: center; width: 44px; height: 44px;
-          border-radius: 13px; color: var(--navy); font-weight: 950;
-          background: linear-gradient(135deg, var(--cyan), #80f2ce);
-          box-shadow: 0 7px 22px rgba(66,213,232,.2);
-        }
-        .brand-name { display: block; font-weight: 900; letter-spacing: .06em; line-height: 1.2; }
-        .brand-subtitle { display: block; color: #b8c9dc; font-size: .7rem; margin-top: 4px; }
-        .nav-links { display: flex; align-items: center; gap: 20px; }
-        .nav-links a { color: #d6e0ed; font-size: .86rem; font-weight: 650; transition: color .2s; }
-        .nav-links a:hover { color: var(--cyan); }
-        .nav-actions { display: flex; align-items: center; gap: 10px; }
-        .menu-toggle {
-          display: none; color: white; background: transparent;
-          border: 1px solid rgba(255,255,255,.25); border-radius: 10px; padding: 8px 11px;
-        }
-        .btn {
-          display: inline-flex; align-items: center; justify-content: center; gap: 9px;
-          padding: 12px 18px; border-radius: 11px; border: 1px solid transparent;
-          font-size: .91rem; font-weight: 800; text-align: center;
-          transition: transform .2s, box-shadow .2s, background .2s;
-        }
-        .btn:hover { transform: translateY(-2px); }
-        .btn-primary { color: white; background: var(--blue); box-shadow: 0 8px 20px rgba(28,118,210,.2); }
-        .btn-primary:hover { background: #155eaa; }
-        .btn-outline { border-color: rgba(255,255,255,.32); color: white; background: transparent; }
-        .btn-outline-dark { border-color: var(--border); color: var(--navy); background: white; }
-        .btn-whatsapp { color: white; background: var(--green); }
-        .btn-whatsapp:hover { background: #0f7c4b; }
-        .btn-small { padding: 9px 12px; font-size: .82rem; }
-        .hero {
-          position: relative; overflow: hidden; padding: 88px 0 76px;
-          color: white; background:
-          radial-gradient(circle at 80% 12%, rgba(66,213,232,.19), transparent 28%),
-          radial-gradient(circle at 10% 90%, rgba(28,118,210,.2), transparent 34%),
-          linear-gradient(135deg, #081426, #10243e 70%, #0a1b2f);
-        }
-        .hero-grid { display: grid; grid-template-columns: 1.12fr .88fr; gap: 48px; align-items: center; }
-        .hero-kicker {
-          display: inline-flex; align-items: center; gap: 9px; padding: 7px 12px;
-          border: 1px solid rgba(66,213,232,.28); border-radius: 999px;
-          color: #c8faff; background: rgba(66,213,232,.07); font-size: .78rem; font-weight: 750;
-        }
-        .hero h1 { max-width: 720px; margin: 22px 0; font-size: clamp(2.8rem, 6vw, 5rem); line-height: 1.02; letter-spacing: -.065em; }
-        .hero h1 span { color: var(--cyan); }
-        .hero-copy { max-width: 620px; color: #c5d2e2; font-size: 1.08rem; }
-        .hero-actions { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 27px; }
-        .hero-note { margin-top: 25px; color: #a9bad0; font-size: .85rem; }
-        .hero-panel {
-          padding: 25px; border: 1px solid rgba(255,255,255,.14);
-          border-radius: 25px; background: rgba(255,255,255,.06);
-          box-shadow: 0 25px 80px rgba(0,0,0,.2);
-        }
-        .hero-panel-top { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 20px; }
-        .hero-panel-top strong { font-size: 1rem; }
-        .live-dot { display: inline-flex; align-items: center; gap: 7px; color: #a9f6d2; font-size: .76rem; }
-        .live-dot:before { content: ""; width: 7px; height: 7px; border-radius: 50%; background: #42e59d; }
-        .hero-feature-list { display: grid; gap: 12px; }
-        .hero-feature {
-          display: flex; gap: 14px; align-items: flex-start; padding: 14px;
-          border: 1px solid rgba(255,255,255,.08); border-radius: 14px;
-          background: rgba(7,16,30,.32);
-        }
-        .hero-feature-icon { display: grid; place-items: center; width: 43px; height: 43px; flex-shrink: 0; border-radius: 12px; background: rgba(66,213,232,.13); font-size: 1.25rem; }
-        .hero-feature strong { display: block; color: white; }
-        .hero-feature span { display: block; color: #b7c8dc; font-size: .83rem; margin-top: 3px; }
-        .trust-strip { padding: 19px 0; background: #edf5fc; border-bottom: 1px solid #e2ebf5; }
-        .trust-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 18px; }
-        .trust-item { display: flex; align-items: center; gap: 10px; color: #30425a; font-size: .86rem; font-weight: 750; }
-        .trust-item span { font-size: 1.25rem; }
-        .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 45px; align-items: center; }
-        .about-panel {
-          min-height: 350px; display: grid; place-items: center; padding: 26px;
-          border-radius: 24px; background:
-          radial-gradient(circle at 20% 20%, rgba(66,213,232,.28), transparent 30%),
-          linear-gradient(145deg, #0d2540, #123b5e);
-          color: white; overflow: hidden;
-        }
-        .about-panel-inner { width: 100%; max-width: 360px; }
-        .about-monogram { display: grid; place-items: center; width: 85px; height: 85px; margin-bottom: 20px; border-radius: 22px; background: var(--cyan); color: var(--navy); font-size: 1.7rem; font-weight: 950; }
-        .about-panel h3 { margin: 0 0 8px; font-size: 1.65rem; }
-        .about-panel p { margin: 0; color: #d0e1f1; }
-        .about-text p { color: var(--muted); }
-        .fact-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 22px 0; }
-        .fact { padding: 13px; border: 1px solid var(--border); border-radius: 12px; background: white; }
-        .fact strong { display: block; color: var(--navy); font-size: .9rem; }
-        .fact span { color: var(--muted); font-size: .79rem; }
-        .tag-list { display: flex; flex-wrap: wrap; gap: 9px; }
-        .tag { display: inline-flex; padding: 7px 11px; border: 1px solid #dce6f2; border-radius: 999px; background: #f8fbff; color: #30435b; font-size: .8rem; font-weight: 700; }
-        .cards-grid { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 20px; }
-        .service-card, .project-card, .construction-card, .product-card {
-          min-width: 0; overflow: hidden; border: 1px solid var(--border);
-          border-radius: var(--radius); background: white; box-shadow: 0 4px 18px rgba(8,20,38,.035);
-          transition: transform .22s, box-shadow .22s;
-        }
-        .service-card:hover, .project-card:hover, .construction-card:hover, .product-card:hover {
-          transform: translateY(-4px); box-shadow: var(--shadow);
-        }
-        .service-card { padding: 24px; }
-        .service-icon { display: grid; place-items: center; width: 49px; height: 49px; margin-bottom: 17px; border-radius: 15px; background: #e9f7ff; font-size: 1.45rem; }
-        .service-card h3, .project-card h3, .construction-card h3, .product-card h3 { margin: 0 0 9px; color: var(--navy); font-size: 1.08rem; line-height: 1.35; }
-        .service-card p, .project-card p, .construction-card p, .product-card p { margin: 0; color: var(--muted); font-size: .9rem; }
-        .skill-section { margin-top: 35px; padding-top: 26px; border-top: 1px solid var(--border); }
-        .skill-section h3 { margin: 0 0 14px; font-size: 1rem; }
-        .project-card .image-placeholder, .construction-card .image-placeholder { aspect-ratio: 16 / 10; }
-        .project-body, .construction-body { padding: 20px; }
-        .project-type { display: inline-block; margin-bottom: 10px; color: var(--blue); font-size: .72rem; font-weight: 850; letter-spacing: .08em; text-transform: uppercase; }
-        .project-link { display: inline-flex; margin-top: 16px; color: var(--blue); font-weight: 800; font-size: .86rem; }
-        .image-placeholder { position: relative; width: 100%; aspect-ratio: 4 / 3; overflow: hidden; background: linear-gradient(135deg,#e4edf7,#f7fbff); }
-        .image-placeholder img { width: 100%; height: 100%; object-fit: cover; transition: transform .35s; }
-        .product-card:hover .image-placeholder img { transform: scale(1.035); }
-        .image-fallback { height: 100%; min-height: 150px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 7px; padding: 16px; text-align: center; color: #52657b; background: linear-gradient(135deg,#e7eff8,#f8fbff); }
-        .image-fallback span:first-child { font-size: 2rem; }
-        .image-fallback span:nth-child(2) { font-weight: 800; font-size: .9rem; }
-        .image-fallback small { font-size: .74rem; }
-        .shop-toolbar { display: grid; grid-template-columns: 1fr auto; gap: 16px; align-items: center; margin-bottom: 22px; }
-        .search-box { width: 100%; padding: 13px 15px; border: 1px solid var(--border); border-radius: 12px; color: var(--ink); background: white; }
-        .category-list { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 24px; }
-        .category-btn { padding: 9px 13px; border: 1px solid var(--border); border-radius: 999px; color: #40516a; background: white; font-size: .82rem; font-weight: 750; }
-        .category-btn.active { color: white; border-color: var(--navy); background: var(--navy); }
-        .product-grid { display: grid; grid-template-columns: repeat(4,minmax(0,1fr)); gap: 17px; }
-        .product-card .image-placeholder { aspect-ratio: 4 / 3; }
-        .product-body { padding: 16px; }
-        .product-badge { display: inline-flex; margin-bottom: 9px; padding: 4px 8px; border-radius: 999px; color: #145b9f; background: #e8f4ff; font-size: .69rem; font-weight: 850; }
-        .product-card h3 { font-size: .98rem; }
-        .product-card p { font-size: .82rem; min-height: 65px; }
-        .product-actions { margin-top: 15px; }
-        .product-actions .btn { width: 100%; }
-        .shop-notice { margin: 0 0 17px; padding: 12px 15px; border: 1px solid #a7e9cb; border-radius: 11px; color: #0b7046; background: #eafbf3; font-size: .88rem; }
-        .enquiry-layout { display: grid; grid-template-columns: 1.1fr .9fr; gap: 25px; align-items: start; margin-top: 40px; }
-        .enquiry-panel, .enquiry-form { padding: 24px; border: 1px solid var(--border); border-radius: 18px; background: white; }
-        .enquiry-panel h3, .enquiry-form h3 { margin: 0 0 8px; color: var(--navy); font-size: 1.2rem; }
-        .muted { color: var(--muted); font-size: .88rem; }
-        .empty-enquiry { margin-top: 20px; padding: 25px 15px; border: 1px dashed #cbd7e5; border-radius: 13px; color: var(--muted); text-align: center; }
-        .enquiry-item { display: grid; grid-template-columns: 1fr auto; gap: 12px; align-items: center; padding: 15px 0; border-bottom: 1px solid var(--border); }
-        .enquiry-item:last-child { border-bottom: 0; }
-        .enquiry-item strong { display: block; color: var(--navy); font-size: .91rem; }
-        .enquiry-item small { color: var(--muted); font-size: .76rem; }
-        .quantity-controls { display: flex; align-items: center; gap: 8px; margin-top: 7px; }
-        .quantity-controls button { display: grid; place-items: center; width: 28px; height: 28px; border: 1px solid var(--border); border-radius: 8px; color: var(--navy); background: #f8fbff; font-weight: 900; }
-        .quantity-controls span { min-width: 20px; text-align: center; font-weight: 800; }
-        .remove-btn { border: 0; color: #b42318; background: transparent; font-size: .78rem; font-weight: 800; }
-        .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
-        .field { display: grid; gap: 6px; margin-bottom: 14px; }
-        .field label { color: #304158; font-size: .82rem; font-weight: 800; }
-        .field input, .field textarea {
-          width: 100%; padding: 12px 13px; border: 1px solid #d6e0eb;
-          border-radius: 10px; color: var(--ink); background: #fff;
-        }
-        .field textarea { min-height: 110px; resize: vertical; }
-        .field input::placeholder, .field textarea::placeholder { color: #95a2b3; }
-        .full-width { grid-column: 1 / -1; }
-        .form-note { margin: 12px 0 0; color: var(--muted); font-size: .78rem; }
-        .empty-state { grid-column: 1 / -1; padding: 30px; border: 1px dashed var(--border); border-radius: 14px; text-align: center; color: var(--muted); }
-        .construction-intro { max-width: 850px; margin-bottom: 30px; }
-        .construction-note { margin-top: 25px; padding: 16px 18px; border-left: 4px solid var(--cyan); border-radius: 0 12px 12px 0; color: #d0dceb; background: rgba(255,255,255,.06); font-size: .88rem; }
-        .content-banner {
-          display: flex; align-items: center; justify-content: space-between; gap: 24px;
-          padding: 28px; border-radius: 20px; background: linear-gradient(135deg,#eaf7ff,#f4fbff);
-          border: 1px solid #d7eaf9;
-        }
-        .content-banner h3 { margin: 0 0 8px; color: var(--navy); font-size: 1.35rem; }
-        .content-banner p { max-width: 700px; margin: 0; color: var(--muted); }
-        .contact-grid { display: grid; grid-template-columns: .8fr 1.2fr; gap: 28px; align-items: start; }
-        .contact-info { display: grid; gap: 13px; }
-        .contact-item { padding: 17px; border: 1px solid rgba(255,255,255,.1); border-radius: 14px; background: rgba(255,255,255,.045); }
-        .contact-item strong { display: block; color: white; }
-        .contact-item a, .contact-item span { display: block; margin-top: 5px; color: #bdccdd; overflow-wrap: anywhere; }
-        .contact-form { padding: 24px; border: 1px solid rgba(255,255,255,.12); border-radius: 18px; background: rgba(255,255,255,.055); }
-        .contact-form h3 { margin: 0 0 20px; color: white; }
-        .contact-form .field label { color: #d5e0ed; }
-        .contact-form .field input, .contact-form .field textarea { border-color: rgba(255,255,255,.16); color: white; background: rgba(3,12,25,.35); }
-        .contact-form .field input::placeholder, .contact-form .field textarea::placeholder { color: #9eafc2; }
-        .contact-form .form-note { color: #b5c5d8; }
-        .social-links { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 22px; }
-        .social-link { display: inline-flex; align-items: center; gap: 8px; padding: 9px 12px; border: 1px solid rgba(255,255,255,.2); border-radius: 10px; color: #e4eef9; font-size: .82rem; font-weight: 750; }
-        .social-link:hover { border-color: var(--cyan); color: var(--cyan); }
-        .site-footer { padding: 27px 0; color: #b4c3d6; background: #050e1a; font-size: .82rem; }
-        .footer-row { display: flex; justify-content: space-between; align-items: center; gap: 20px; flex-wrap: wrap; }
-        .footer-links { display: flex; flex-wrap: wrap; gap: 15px; }
-        .footer-links a:hover { color: var(--cyan); }
-        .floating-whatsapp {
-          position: fixed; right: 20px; bottom: 20px; z-index: 40;
-          display: grid; place-items: center; width: 56px; height: 56px;
-          border-radius: 50%; color: white; background: var(--green);
-          box-shadow: 0 10px 30px rgba(0,0,0,.22); font-size: 1.55rem;
-        }
-        .floating-whatsapp:hover { transform: translateY(-3px); }
+        .wrap { width: min(1240px, calc(100% - 44px)); margin: 0 auto; }
+        .eyebrow { margin: 0 0 12px; color: var(--accent); font: 700 .74rem/1.4 ui-monospace, SFMono-Regular, Menlo, monospace; letter-spacing: .15em; text-transform: uppercase; }
+        .heading { margin: 0 0 18px; font-size: clamp(2rem,4vw,3rem); line-height: 1.13; letter-spacing: -.045em; color: #eef5ff; }
+        .lead { max-width: 740px; margin: 0; color: #a9bbcf; font-size: 1rem; }
+        .section { padding: 94px 0; border-top: 1px solid var(--line); }
+        .section-head { max-width: 790px; margin-bottom: 35px; }
+        .site-header { position: sticky; top: 0; z-index: 100; background: rgba(8,20,35,.96); border-bottom: 1px solid var(--line); backdrop-filter: blur(16px); }
+        .nav { min-height: 76px; display: flex; align-items: center; justify-content: space-between; gap: 22px; }
+        .brand { display: flex; align-items: center; gap: 11px; min-width: 210px; }
+        .brand-mark { width: 43px; height: 43px; display: grid; place-items: center; border-radius: 12px; background: var(--accent); color: #0b192b; font-weight: 950; }
+        .brand strong { display: block; font-size: .94rem; letter-spacing: .06em; }
+        .brand small { display: block; color: var(--muted); font-size: .68rem; }
+        .nav-links { display: flex; gap: 17px; align-items: center; }
+        .nav-links a { color: #c4d2e2; font-size: .8rem; }
+        .nav-links a:hover { color: var(--accent); }
+        .menu-button { display: none; border: 1px solid var(--line); background: transparent; color: white; padding: 9px 12px; border-radius: 8px; }
+        .button { display: inline-flex; align-items: center; justify-content: center; gap: 8px; border: 1px solid transparent; border-radius: 9px; padding: 12px 17px; font-weight: 800; font-size: .88rem; cursor: pointer; transition: transform .2s, background .2s; }
+        .button:hover { transform: translateY(-2px); }
+        .button-primary { color: #071829 !important; background: var(--accent); }
+        .button-outline { color: #e9f2ff !important; border-color: rgba(226,240,255,.28); background: transparent; }
+        .button-dark { color: white !important; background: #102238; }
+        .button-green { color: white !important; background: var(--green); }
+        .button-small { padding: 8px 11px; font-size: .78rem; }
+        .hero { padding: 83px 0 72px; }
+        .hero-grid { display: grid; grid-template-columns: minmax(0,1fr) 250px; gap: 50px; align-items: center; }
+        .hero h1 { margin: 15px 0 17px; font-size: clamp(2.65rem,6vw,5rem); line-height: 1.02; letter-spacing: -.065em; color: #f3f7fc; }
+        .hero h1 span { color: var(--accent); }
+        .hero-title { color: #b5c8dc; font-size: 1.15rem; }
+        .hero-copy { max-width: 700px; color: #a2b4c9; font-size: 1rem; }
+        .hero-buttons { display: flex; flex-wrap: wrap; gap: 11px; margin-top: 25px; }
+        .hero-social { display: flex; flex-wrap: wrap; gap: 15px; margin-top: 24px; color: #a7b9cd; font-size: .82rem; }
+        .hero-social a:hover { color: var(--accent); }
+        .hero-aside { border-left: 1px solid var(--line); padding-left: 25px; }
+        .aside-label { margin: 0 0 14px; color: var(--accent); font: 700 .7rem ui-monospace, monospace; letter-spacing: .12em; }
+        .aside-link { display: block; padding: 11px 0; color: #c9d8e9; border-bottom: 1px solid var(--line); font-size: .85rem; }
+        .aside-link:after { content: " ↗"; color: var(--accent); }
+        .aside-link:hover { color: var(--accent); }
+        .about-grid { display: grid; grid-template-columns: 1fr 1.15fr; gap: 50px; align-items: start; }
+        .profile-placeholder { min-height: 330px; display: grid; place-items: center; padding: 25px; border: 1px solid var(--line); border-radius: 16px; background: linear-gradient(145deg,#102944,#0d1d31); text-align: center; }
+        .profile-placeholder img { width: 100%; max-height: 460px; object-fit: cover; border-radius: 12px; }
+        .profile-placeholder .monogram { width: 100px; height: 100px; display: grid; place-items: center; margin: auto auto 18px; border-radius: 25px; color: #071829; background: var(--accent); font-size: 2rem; font-weight: 950; }
+        .profile-placeholder strong { display: block; color: #f4f8ff; font-size: 1.2rem; }
+        .profile-placeholder p, .about-copy p { color: #9fb2c8; }
+        .facts { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 23px; }
+        .fact { padding: 14px; border: 1px solid var(--line); border-radius: 10px; }
+        .fact strong { display: block; color: #e9f2ff; font-size: .88rem; }
+        .fact span { color: var(--muted); font-size: .76rem; }
+        .tag-list { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 22px; }
+        .tag { padding: 6px 10px; border: 1px solid rgba(101,240,208,.18); border-radius: 5px; color: #bdece1; background: rgba(101,240,208,.045); font: .75rem ui-monospace, monospace; }
+        .experience-list { border-top: 1px solid var(--line); }
+        .experience-item { display: grid; grid-template-columns: 125px 1fr; gap: 20px; padding: 23px 0; border-bottom: 1px solid var(--line); }
+        .experience-date { color: #93a8bd; font: .76rem ui-monospace, monospace; }
+        .experience-item h3 { margin: 0 0 5px; color: #e8f1fb; font-size: 1rem; }
+        .experience-item p { margin: 0; color: #9fb2c8; font-size: .88rem; }
+        .cards { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 16px; }
+        .service-card { padding: 22px; border: 1px solid var(--line); border-radius: 13px; background: rgba(255,255,255,.025); }
+        .service-icon { font-size: 1.4rem; }
+        .service-card h3 { margin: 12px 0 8px; color: #eaf3ff; font-size: 1rem; }
+        .service-card p { margin: 0; color: #9fb2c8; font-size: .86rem; }
+        .project-card { overflow: hidden; border: 1px solid var(--line); border-radius: 13px; background: #0e2034; }
+        .project-image { aspect-ratio: 16/10; background: #162b42; overflow: hidden; }
+        .project-image img { width: 100%; height: 100%; object-fit: cover; }
+        .project-fallback { height: 100%; min-height: 150px; display: grid; place-items: center; padding: 20px; color: #94adc5; text-align: center; font-size: .8rem; }
+        .project-body { padding: 19px; }
+        .project-type { color: var(--accent); font: .7rem ui-monospace, monospace; text-transform: uppercase; }
+        .project-body h3 { margin: 9px 0; color: #eaf2fb; font-size: 1.03rem; }
+        .project-body p { color: #9fb2c8; font-size: .86rem; }
+        .project-body a { color: var(--accent); font-size: .82rem; font-weight: 800; }
+        .shop-section { background: var(--shopbg); color: var(--ink); }
+        .shop-section .heading { color: #102238; }
+        .shop-section .lead { color: #607187; }
+        .shop-section .eyebrow { color: #126b92; }
+        .shop-bar { display: grid; grid-template-columns: 1fr auto; gap: 13px; margin: 24px 0 15px; }
+        .shop-input { width: 100%; padding: 13px 14px; border: 1px solid #d8e0ea; border-radius: 9px; background: white; color: #15253a; }
+        .category-scroll { display: flex; gap: 8px; overflow-x: auto; padding: 2px 0 13px; margin-bottom: 14px; }
+        .category-btn { flex-shrink: 0; padding: 8px 12px; border: 1px solid #d8e0ea; border-radius: 6px; background: white; color: #41546b; font-size: .77rem; font-weight: 750; }
+        .category-btn.active { background: #102238; color: white; border-color: #102238; }
+        .catalogue-meta { display: flex; justify-content: space-between; align-items: center; gap: 15px; margin: 10px 0 20px; color: #62748a; font-size: .83rem; }
+        .product-grid { display: grid; grid-template-columns: repeat(4,minmax(0,1fr)); gap: 15px; }
+        .product-card { display: flex; flex-direction: column; min-width: 0; overflow: hidden; border: 1px solid #e0e6ee; border-radius: 12px; background: white; box-shadow: 0 4px 15px rgba(19,42,70,.035); }
+        .product-image { position: relative; aspect-ratio: 1/0.88; overflow: hidden; background: #e9eef4; }
+        .product-image img { width: 100%; height: 100%; object-fit: cover; transition: transform .25s; }
+        .product-card:hover .product-image img { transform: scale(1.04); }
+        .product-placeholder { height: 100%; min-height: 135px; display: grid; place-items: center; padding: 15px; color: #697b90; text-align: center; font-size: .77rem; }
+        .stock-label { position: absolute; top: 10px; left: 10px; padding: 4px 7px; border-radius: 5px; color: #126441; background: #e3f8ec; font-size: .67rem; font-weight: 800; }
+        .stock-label.out { color: #9e2929; background: #fff0f0; }
+        .product-info { display: flex; flex: 1; flex-direction: column; padding: 14px; }
+        .product-category { color: #58748f; font-size: .68rem; font-weight: 800; text-transform: uppercase; letter-spacing: .05em; }
+        .product-info h3 { margin: 7px 0; color: #14243a; font-size: .93rem; line-height: 1.35; }
+        .product-info p { flex: 1; margin: 0 0 13px; color: #6b7b8d; font-size: .78rem; line-height: 1.55; }
+        .price { color: #0e263f; font-size: 1.08rem; font-weight: 900; }
+        .price-note { margin: 3px 0 12px; color: #8a98a8; font-size: .68rem; }
+        .product-info .button { width: 100%; }
+        .cart-section { margin-top: 36px; padding: 24px; border: 1px solid #dce4ed; border-radius: 13px; background: white; }
+        .cart-section h3 { margin: 0 0 8px; color: #14243a; }
+        .cart-intro { margin: 0 0 20px; color: #6b7b8d; font-size: .85rem; }
+        .cart-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 28px; }
+        .cart-item { display: grid; grid-template-columns: 1fr auto; gap: 12px; padding: 13px 0; border-bottom: 1px solid #e6ebf1; }
+        .cart-item strong { display: block; color: #14243a; font-size: .87rem; }
+        .cart-item small { color: #75859a; }
+        .qty { display: flex; gap: 8px; align-items: center; margin-top: 6px; }
+        .qty button { width: 27px; height: 27px; border: 1px solid #dbe3ec; border-radius: 6px; background: #f8fafc; }
+        .remove { border: 0; color: #a33131; background: transparent; font-size: .76rem; }
+        .empty-cart { padding: 28px 10px; color: #728197; border: 1px dashed #d1dbe6; border-radius: 10px; text-align: center; }
+        .field { display: grid; gap: 6px; margin-bottom: 12px; }
+        .field label { color: #3e5269; font-size: .78rem; font-weight: 800; }
+        .field input, .field textarea { width: 100%; padding: 11px 12px; border: 1px solid #d7e0e9; border-radius: 8px; color: #14243a; background: white; }
+        .field textarea { min-height: 90px; resize: vertical; }
+        .notice { margin: 12px 0; padding: 11px 13px; border-radius: 8px; color: #145c40; background: #e8f9f0; font-size: .82rem; }
+        .note { color: #718096; font-size: .75rem; }
+        .carpentry-intro { max-width: 830px; margin-bottom: 28px; }
+        .gallery { position: relative; overflow: hidden; border: 1px solid var(--line); border-radius: 16px; background: #071525; }
+        .gallery-image { position: relative; height: clamp(300px, 58vw, 650px); background: #12263c; touch-action: pan-y; }
+        .gallery-image img { width: 100%; height: 100%; object-fit: cover; }
+        .gallery-placeholder { width: 100%; height: 100%; display: grid; place-items: center; padding: 25px; color: #a9bfd5; text-align: center; }
+        .gallery-caption { position: absolute; right: 0; bottom: 0; left: 0; padding: 60px 25px 22px; background: linear-gradient(transparent,rgba(3,10,19,.94)); }
+        .gallery-caption small { color: var(--accent); font: .74rem ui-monospace, monospace; text-transform: uppercase; }
+        .gallery-caption h3 { margin: 5px 0; color: white; font-size: clamp(1.25rem,3vw,2rem); }
+        .gallery-caption p { max-width: 680px; margin: 0; color: #d1deed; }
+        .gallery-arrow { position: absolute; top: 50%; z-index: 2; width: 44px; height: 44px; display: grid; place-items: center; border: 1px solid rgba(255,255,255,.35); border-radius: 50%; color: white; background: rgba(5,18,32,.65); font-size: 1.4rem; transform: translateY(-50%); }
+        .gallery-arrow:hover { color: #071829; background: var(--accent); }
+        .gallery-arrow.left { left: 15px; }
+        .gallery-arrow.right { right: 15px; }
+        .gallery-bottom { display: flex; justify-content: space-between; align-items: center; gap: 15px; flex-wrap: wrap; padding: 14px 16px; border-top: 1px solid var(--line); }
+        .gallery-controls { display: flex; align-items: center; gap: 8px; }
+        .gallery-controls button { padding: 7px 10px; border: 1px solid var(--line); border-radius: 7px; color: #e2edf9; background: #102238; font-size: .77rem; }
+        .dots { display: flex; gap: 7px; }
+        .dot { width: 8px; height: 8px; padding: 0; border: 0; border-radius: 50%; background: #4b6279; }
+        .dot.active { width: 23px; border-radius: 9px; background: var(--accent); }
+        .gallery-count { color: #9cb0c6; font: .75rem ui-monospace, monospace; }
+        .construction-services { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 13px; margin-top: 25px; }
+        .construction-service { padding: 17px; border: 1px solid var(--line); border-radius: 10px; }
+        .construction-service strong { display: block; color: #e8f1fb; font-size: .88rem; }
+        .construction-service span { display: block; margin-top: 6px; color: #9fb2c8; font-size: .79rem; }
+        .content-banner { display: flex; justify-content: space-between; align-items: center; gap: 25px; padding: 25px; border: 1px solid var(--line); border-radius: 13px; background: #102238; }
+        .content-banner h3 { margin: 0 0 8px; color: #edf4fd; }
+        .content-banner p { max-width: 700px; margin: 0; color: #9fb2c8; }
+        .contact-grid { display: grid; grid-template-columns: .8fr 1.2fr; gap: 35px; }
+        .contact-list { display: grid; gap: 12px; }
+        .contact-item { padding: 15px; border: 1px solid var(--line); border-radius: 10px; }
+        .contact-item strong { display: block; color: #edf4fd; }
+        .contact-item a, .contact-item span { display: block; margin-top: 5px; color: #9fb2c8; overflow-wrap: anywhere; }
+        .contact-form { padding: 22px; border: 1px solid var(--line); border-radius: 13px; background: rgba(255,255,255,.025); }
+        .contact-form h3 { margin: 0 0 18px; color: #f0f6ff; }
+        .contact-form .field label { color: #bdcde0; }
+        .contact-form .field input, .contact-form .field textarea { border-color: var(--line); color: white; background: #0b192b; }
+        .contact-form .field input::placeholder, .contact-form .field textarea::placeholder { color: #71859d; }
+        .socials { display: flex; flex-wrap: wrap; gap: 9px; margin-top: 20px; }
+        .socials a { padding: 8px 10px; border: 1px solid var(--line); border-radius: 7px; color: #c5d4e6; font-size: .78rem; }
+        .socials a:hover { color: var(--accent); border-color: var(--accent); }
+        .footer { padding: 25px 0; border-top: 1px solid var(--line); color: #8ea3b9; font-size: .78rem; }
+        .footer-row { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 16px; }
+        .float-wa { position: fixed; right: 18px; bottom: 18px; z-index: 80; width: 52px; height: 52px; display: grid; place-items: center; border-radius: 50%; color: white !important; background: #15965c; box-shadow: 0 8px 24px rgba(0,0,0,.28); font-size: 1.4rem; }
         @media (max-width: 1050px) {
-          .nav-links { gap: 12px; }
-          .nav-links a { font-size: .8rem; }
-          .nav-actions .btn { padding: 10px 12px; }
+          .nav-links { gap: 10px; }
+          .nav-links a { font-size: .74rem; }
           .product-grid { grid-template-columns: repeat(3,minmax(0,1fr)); }
         }
         @media (max-width: 850px) {
-          .menu-toggle { display: inline-flex; align-items: center; gap: 8px; }
-          .nav-actions { margin-left: auto; }
-          .nav-links {
-            position: absolute; top: 76px; left: 0; right: 0; display: none;
-            align-items: stretch; gap: 0; padding: 12px 20px 20px;
-            background: var(--navy); border-bottom: 1px solid rgba(255,255,255,.12);
-          }
-          .nav-links.open { display: flex; flex-direction: column; }
-          .nav-links a { padding: 12px 0; border-bottom: 1px solid rgba(255,255,255,.08); font-size: .92rem; }
-          .nav-links a:last-child { border-bottom: 0; }
-          .hero-grid, .two-col, .contact-grid, .enquiry-layout { grid-template-columns: 1fr; }
-          .hero-grid { gap: 32px; }
-          .hero-panel { max-width: 650px; }
-          .cards-grid { grid-template-columns: repeat(2,minmax(0,1fr)); }
-          .trust-grid { grid-template-columns: repeat(2,1fr); }
-          .product-grid { grid-template-columns: repeat(2,minmax(0,1fr)); }
-          .section { padding: 68px 0; }
+          .menu-button { display: block; }
+          .nav { min-height: 70px; }
+          .nav-links { display: none; position: absolute; top: 70px; left: 0; right: 0; padding: 12px 22px 20px; background: #0b192b; border-bottom: 1px solid var(--line); }
+          .nav-links.open { display: grid; gap: 0; }
+          .nav-links a { padding: 12px 0; border-bottom: 1px solid var(--line); font-size: .88rem; }
+          .hero-grid, .about-grid, .cart-layout, .contact-grid { grid-template-columns: 1fr; }
+          .hero-grid { gap: 30px; }
+          .hero-aside { border-left: 0; padding-left: 0; }
+          .hero-aside-inner { display: grid; grid-template-columns: 1fr 1fr; gap: 0 18px; }
+          .hero-aside-inner .aside-label { grid-column: 1/-1; }
+          .cards { grid-template-columns: repeat(2,minmax(0,1fr)); }
+          .construction-services { grid-template-columns: repeat(2,minmax(0,1fr)); }
+          .section { padding: 70px 0; }
         }
         @media (max-width: 560px) {
-          .container { width: min(100% - 28px, 1160px); }
-          .nav-row { min-height: 68px; gap: 8px; }
-          .brand-mark { width: 38px; height: 38px; }
-          .brand-name { font-size: .86rem; }
-          .brand-subtitle { font-size: .63rem; }
-          .nav-links { top: 68px; }
-          .nav-actions .btn { display: none; }
-          .hero { padding: 58px 0 52px; }
-          .hero h1 { font-size: clamp(2.55rem, 12vw, 3.5rem); }
-          .hero-copy { font-size: .98rem; }
-          .hero-actions { flex-direction: column; align-items: stretch; }
-          .hero-panel { padding: 16px; }
-          .trust-grid { gap: 12px; }
-          .trust-item { font-size: .77rem; }
-          .section { padding: 56px 0; }
-          .cards-grid, .product-grid { grid-template-columns: 1fr 1fr; gap: 11px; }
-          .service-card { padding: 17px; }
-          .service-card h3 { font-size: .97rem; }
-          .service-card p { font-size: .83rem; }
-          .product-body { padding: 12px; }
-          .product-card h3 { font-size: .89rem; }
-          .product-card p { min-height: 95px; font-size: .78rem; }
-          .product-card .btn { padding: 9px 7px; font-size: .76rem; }
-          .shop-toolbar { grid-template-columns: 1fr; }
-          .category-list { flex-wrap: nowrap; overflow-x: auto; padding-bottom: 7px; }
-          .category-btn { flex-shrink: 0; }
-          .enquiry-panel, .enquiry-form, .contact-form { padding: 17px; }
-          .form-grid, .fact-grid { grid-template-columns: 1fr; }
-          .content-banner { align-items: stretch; flex-direction: column; padding: 20px; }
-          .floating-whatsapp { width: 50px; height: 50px; right: 13px; bottom: 13px; }
+          .wrap { width: calc(100% - 28px); }
+          .brand { min-width: 0; }
+          .brand strong { font-size: .82rem; }
+          .brand small { font-size: .61rem; }
+          .brand-mark { width: 37px; height: 37px; }
+          .hero { padding: 57px 0; }
+          .hero h1 { font-size: clamp(2.5rem,12vw,3.4rem); }
+          .hero-title { font-size: 1rem; }
+          .hero-buttons { flex-direction: column; align-items: stretch; }
+          .hero-aside-inner { grid-template-columns: 1fr 1fr; }
+          .section { padding: 57px 0; }
+          .cards { grid-template-columns: 1fr; }
+          .product-grid { grid-template-columns: repeat(2,minmax(0,1fr)); gap: 10px; }
+          .product-info { padding: 10px; }
+          .product-info h3 { font-size: .83rem; }
+          .product-info p { font-size: .73rem; }
+          .product-info .price { font-size: .94rem; }
+          .product-info .button { padding: 9px 6px; font-size: .72rem; }
+          .shop-bar { grid-template-columns: 1fr; }
+          .cart-section { padding: 16px; }
+          .experience-item { grid-template-columns: 1fr; gap: 7px; }
+          .facts { grid-template-columns: 1fr 1fr; }
+          .construction-services { grid-template-columns: 1fr; }
+          .gallery-image { height: 380px; }
+          .gallery-arrow { width: 36px; height: 36px; }
+          .gallery-arrow.left { left: 8px; }
+          .gallery-arrow.right { right: 8px; }
+          .gallery-caption { padding: 55px 16px 18px; }
+          .gallery-caption p { font-size: .82rem; }
+          .content-banner { align-items: stretch; flex-direction: column; padding: 18px; }
+          .contact-form { padding: 16px; }
+          .footer-row { flex-direction: column; }
         }
         @media (prefers-reduced-motion: reduce) {
-          *, *::before, *::after {
-            scroll-behavior: auto !important;
-            transition-duration: .01ms !important;
-            animation-duration: .01ms !important;
-            animation-iteration-count: 1 !important;
-          }
+          *, *::before, *::after { scroll-behavior: auto !important; transition-duration: .01ms !important; }
         }
       `}</style>
 
       <header className="site-header">
-        <div className="container nav-row">
-          <a href="#home" className="brand" onClick={closeMobileMenu}>
-            <span className="brand-mark">JM</span>
+        <div className="wrap nav">
+          <a className="brand" href="#home" onClick={closeMenu}>
+            <span className="brand-mark">UJ</span>
             <span>
-              <span className="brand-name">JAYMART</span>
-              <span className="brand-subtitle">Computers · Web · Technology</span>
+              <strong>UDOTOR JOHN</strong>
+              <small>Developer · Digital Professional</small>
             </span>
           </a>
 
-          <nav
-            className={`nav-links ${mobileMenuOpen ? "open" : ""}`}
-            aria-label="Main navigation"
-          >
-            <a href="#about" onClick={closeMobileMenu}>About</a>
-            <a href="#development" onClick={closeMobileMenu}>Web & Digital</a>
-            <a href="#portfolio" onClick={closeMobileMenu}>Portfolio</a>
-            <a href="#shop" onClick={closeMobileMenu}>Shop</a>
-            <a href="#construction" onClick={closeMobileMenu}>Carpentry</a>
-            <a href="#content" onClick={closeMobileMenu}>Tech Content</a>
-            <a href="#contact" onClick={closeMobileMenu}>Contact</a>
+          <nav className={`nav-links ${mobileMenu ? "open" : ""}`}>
+            <a href="#about" onClick={closeMenu}>About</a>
+            <a href="#experience" onClick={closeMenu}>Experience</a>
+            <a href="#projects" onClick={closeMenu}>Projects</a>
+            <a href="#services" onClick={closeMenu}>Services</a>
+            <a href="#shop" onClick={closeMenu}>Shop</a>
+            <a href="#carpentry" onClick={closeMenu}>Carpentry</a>
+            <a href="#contact" onClick={closeMenu}>Contact</a>
           </nav>
 
-          <div className="nav-actions">
-            <a className="btn btn-primary btn-small" href="#shop">Browse Products</a>
-            <button
-              type="button"
-              className="menu-toggle"
-              aria-expanded={mobileMenuOpen}
-              aria-label="Toggle navigation"
-              onClick={() => setMobileMenuOpen((open) => !open)}
-            >
-              ☰ Menu
-            </button>
-          </div>
+          <button
+            type="button"
+            className="menu-button"
+            onClick={() => setMobileMenu((value) => !value)}
+            aria-expanded={mobileMenu}
+          >
+            {mobileMenu ? "Close" : "Menu"}
+          </button>
         </div>
       </header>
 
       <main>
-        {/* HERO: main professional identity and routes into each part of the business */}
+        {/* PORTFOLIO HERO */}
         <section className="hero" id="home">
-          <div className="container hero-grid">
+          <div className="wrap hero-grid">
             <div>
-              <span className="hero-kicker">Technology · Digital Solutions · Construction</span>
+              <p className="eyebrow">Full-Stack Developer · Digital Professional</p>
               <h1>
-                I build digital experiences. <span>I make technology practical.</span>
+                Udotor John
+                <br />
+                <span>Itsenegbemhe.</span>
               </h1>
+              <p className="hero-title">
+                I build practical digital experiences for people and businesses.
+              </p>
               <p className="hero-copy">
-                I’m Udotor John Itsenegbemhe — a Computer Science graduate,
-                full-stack web developer, digital content professional and
-                experienced building carpenter. Through Jaymart, I combine
-                practical skills with dependable service for people and businesses.
+                I’m a Computer Science graduate and full-stack web developer
+                working with modern JavaScript technologies, APIs and databases.
+                My professional work also spans website development, social media
+                management, content management and technology education.
               </p>
-              <div className="hero-actions">
-                <a className="btn btn-primary" href="#portfolio">Explore My Work ↗</a>
-                <a className="btn btn-outline" href="#shop">Shop Computers & Solar</a>
-                <a className="btn btn-outline" href="#contact">Work With Me</a>
+              <div className="hero-buttons">
+                <a className="button button-primary" href="#projects">Explore My Work ↘</a>
+                <a className="button button-outline" href="#contact">Let's Talk</a>
               </div>
-              <p className="hero-note">
-                Based in Benin City, Edo State, Nigeria · Available for enquiries
-                about digital services, products and carpentry projects.
-              </p>
+              <div className="hero-social">
+                <a href={SITE.github} target="_blank" rel="noreferrer">GitHub ↗</a>
+                <a href={SITE.linkedin} target="_blank" rel="noreferrer">LinkedIn ↗</a>
+                <a href={SITE.youtube} target="_blank" rel="noreferrer">YouTube ↗</a>
+              </div>
             </div>
 
-            <div className="hero-panel">
-              <div className="hero-panel-top">
-                <strong>What I bring to the table</strong>
-                <span className="live-dot">Professional services</span>
+            <aside className="hero-aside">
+              <div className="hero-aside-inner">
+                <p className="aside-label">ON THIS WEBSITE</p>
+                <a className="aside-link" href="#about">About me</a>
+                <a className="aside-link" href="#experience">Experience</a>
+                <a className="aside-link" href="#projects">Selected work</a>
+                <a className="aside-link" href="#services">Digital services</a>
+                <a className="aside-link" href="#shop">Online shop</a>
+                <a className="aside-link" href="#carpentry">Building carpentry</a>
               </div>
-              <div className="hero-feature-list">
-                <div className="hero-feature">
-                  <span className="hero-feature-icon">⌘</span>
-                  <div>
-                    <strong>Web Development</strong>
-                    <span>Responsive websites, frontend and backend solutions.</span>
-                  </div>
-                </div>
-                <div className="hero-feature">
-                  <span className="hero-feature-icon">🛒</span>
-                  <div>
-                    <strong>Technology Products</strong>
-                    <span>Computers, mobile phones, accessories and solar products.</span>
-                  </div>
-                </div>
-                <div className="hero-feature">
-                  <span className="hero-feature-icon">📣</span>
-                  <div>
-                    <strong>Digital Content</strong>
-                    <span>Social media management, content planning and technology tutorials.</span>
-                  </div>
-                </div>
-                <div className="hero-feature">
-                  <span className="hero-feature-icon">🏗️</span>
-                  <div>
-                    <strong>Building Carpentry</strong>
-                    <span>Roofing, decking, formwork, ceilings and related building work.</span>
-                  </div>
-                </div>
-              </div>
-            </div>
+            </aside>
           </div>
         </section>
 
-        <div className="trust-strip">
-          <div className="container trust-grid">
-            <div className="trust-item"><span>🎓</span> Computer Science Graduate</div>
-            <div className="trust-item"><span>💻</span> Full-Stack Web Development</div>
-            <div className="trust-item"><span>📱</span> Digital & Content Management</div>
-            <div className="trust-item"><span>🪚</span> Building Carpentry Experience</div>
-          </div>
-        </div>
-
-        {/* ABOUT: use your own portrait in /public/images/profile.jpg if desired */}
+        {/* ABOUT */}
         <section className="section" id="about">
-          <div className="container two-col">
-            <div className="about-panel">
-              <div className="about-panel-inner">
-                {/*
-                  IMAGE PLACEHOLDER:
-                  Add your professional portrait at /public/images/profile.jpg.
-                  To display it here, replace the about-monogram div with:
-                  <ImagePlaceholder src="/images/profile.jpg" alt="Udotor John Itsenegbemhe" />
-                  Then style the portrait as needed.
-                */}
-                <div className="about-monogram">UJ</div>
-                <h3>Udotor John Itsenegbemhe</h3>
-                <p>Full-Stack Developer · Digital Professional · Building Carpenter</p>
+          <div className="wrap about-grid">
+            <div className="profile-placeholder">
+              {/*
+                PROFILE PHOTO:
+                Upload your portrait to public/images/profile.jpg.
+                Replace the monogram area with:
+                <img src="/images/profile.jpg" alt="Udotor John Itsenegbemhe" />
+              */}
+              <div>
+                <div className="monogram">UJ</div>
+                <strong>Udotor John Itsenegbemhe</strong>
+                <p>Computer Science Graduate · Full-Stack Developer</p>
               </div>
             </div>
 
-            <div className="about-text">
-              <SectionHeading
-                eyebrow="About Me"
-                title="A practical professional with skills across digital and hands-on work."
-              />
+            <div className="about-copy">
+              <p className="eyebrow">01 / About</p>
+              <h2 className="heading">Technology, communication and practical problem-solving.</h2>
               <p>
                 I hold a B.Sc. in Computer Science from Ambrose Alli University,
                 where I graduated magna cum laude. My technical background
-                includes modern JavaScript development, frontend and backend
-                technologies, APIs, AI integration and website hosting.
+                includes React, Next.js, JavaScript, Node.js, Express, MongoDB,
+                APIs, AI integration and website hosting.
               </p>
               <p>
-                Alongside technology, I bring long-term practical experience in
-                building carpentry and related construction work. I also work
-                across social media and content management, helping information
-                and services reach their intended audience.
+                I also work in social media and content management, including
+                practical technology content. Outside the digital space, I bring
+                almost 15 years of carpentry experience focused on building
+                construction, roofing and related timber work.
               </p>
-              <div className="fact-grid">
+              <div className="facts">
                 <div className="fact">
                   <strong>B.Sc. Computer Science</strong>
                   <span>Ambrose Alli University</span>
                 </div>
                 <div className="fact">
-                  <strong>Full-Stack Development</strong>
-                  <span>React, Node.js, Express, MongoDB</span>
+                  <strong>Web Development Training</strong>
+                  <span>React, Node.js, MongoDB and JavaScript</span>
                 </div>
                 <div className="fact">
-                  <strong>Digital Communications</strong>
+                  <strong>Digital Content</strong>
                   <span>Social media and content management</span>
                 </div>
                 <div className="fact">
@@ -984,98 +1198,170 @@ function App() {
                   <span>Roofing and construction-related woodwork</span>
                 </div>
               </div>
-              <div className="hero-actions">
-                <a className="btn btn-primary" href={BUSINESS.github} target="_blank" rel="noreferrer">View GitHub ↗</a>
-                <a className="btn btn-outline-dark" href={BUSINESS.linkedin} target="_blank" rel="noreferrer">Connect on LinkedIn ↗</a>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        {/* DIGITAL SERVICES */}
-        <section className="section section-soft" id="development">
-          <div className="container">
-            <SectionHeading
-              eyebrow="Digital Services"
-              title="Digital solutions designed around your goals."
-              description="From creating a professional online presence to managing content and supporting everyday technology, these services help individuals and businesses work smarter online."
-              centered
-            />
-            <div className="cards-grid">
-              {DIGITAL_SERVICES.map((service) => (
-                <article className="service-card" key={service.title}>
-                  <div className="service-icon" aria-hidden="true">{service.icon}</div>
-                  <h3>{service.title}</h3>
-                  <p>{service.description}</p>
-                </article>
-              ))}
-            </div>
-
-            <div className="skill-section">
-              <h3>Technical Skills and Tools</h3>
               <div className="tag-list">
-                {WEB_SKILLS.map((skill) => <span className="tag" key={skill}>{skill}</span>)}
+                {SKILLS.map((skill) => <span className="tag" key={skill}>{skill}</span>)}
               </div>
             </div>
           </div>
         </section>
 
-        {/* PORTFOLIO: replace sample images with real project screenshots */}
-        <section className="section" id="portfolio">
-          <div className="container">
-            <SectionHeading
-              eyebrow="Selected Work"
-              title="A portfolio built around practical digital work."
-              description="Explore examples of web development and technology content. Replace the sample image paths with screenshots of your actual work so visitors can see the projects clearly."
-            />
-            <div className="cards-grid">
+        {/* EXPERIENCE */}
+        <section className="section" id="experience">
+          <div className="wrap">
+            <div className="section-head">
+              <p className="eyebrow">02 / Experience and Background</p>
+              <h2 className="heading">The foundation behind my work.</h2>
+              <p className="lead">
+                A combination of formal education, technical training,
+                computer-based operational experience and practical work.
+              </p>
+            </div>
+
+            <div className="experience-list">
+              <article className="experience-item">
+                <div className="experience-date">2019 – 2020</div>
+                <div>
+                  <h3>Web Development Industrial Trainee — Infinity Computer Tech</h3>
+                  <p>
+                    Completed industrial training focused on web development,
+                    HTML, CSS, PHP fundamentals and website hosting.
+                  </p>
+                </div>
+              </article>
+              <article className="experience-item">
+                <div className="experience-date">2011 – 2020</div>
+                <div>
+                  <h3>Ad Hoc Staff / Computer Operator — INEC</h3>
+                  <p>
+                    Supported computer-based operations during Continuous Voter
+                    Registration and election-related assignments.
+                  </p>
+                </div>
+              </article>
+              <article className="experience-item">
+                <div className="experience-date">Education</div>
+                <div>
+                  <h3>B.Sc. Computer Science — Ambrose Alli University</h3>
+                  <p>Graduated in August 2021, magna cum laude.</p>
+                </div>
+              </article>
+              <article className="experience-item">
+                <div className="experience-date">Practical work</div>
+                <div>
+                  <h3>Building Carpentry and Construction Work</h3>
+                  <p>
+                    Almost 15 years of carpentry experience in roofing,
+                    decking/formwork, ceilings, boarding and related
+                    building construction work.
+                  </p>
+                </div>
+              </article>
+            </div>
+          </div>
+        </section>
+
+        {/* PROJECTS */}
+        <section className="section" id="projects">
+          <div className="wrap">
+            <div className="section-head">
+              <p className="eyebrow">03 / Selected Work</p>
+              <h2 className="heading">Work that shows how I think and build.</h2>
+              <p className="lead">
+                Replace the image placeholders with screenshots and thumbnails
+                from your actual websites and published content. Add direct live
+                project links when available.
+              </p>
+            </div>
+            <div className="cards">
               {PROJECTS.map((project) => (
                 <article className="project-card" key={project.title}>
-                  <ImagePlaceholder src={project.image} alt={project.title} />
+                  <div className="project-image">
+                    <img
+                      src={project.image}
+                      alt={project.title}
+                      loading="lazy"
+                      onError={(event) => {
+                        event.currentTarget.style.display = "none";
+                        event.currentTarget.parentElement.innerHTML =
+                          `<div class="project-fallback">Add your image:<br/>${project.image}</div>`;
+                      }}
+                    />
+                  </div>
                   <div className="project-body">
                     <span className="project-type">{project.type}</span>
                     <h3>{project.title}</h3>
                     <p>{project.description}</p>
-                    <a className="project-link" href={project.link} target="_blank" rel="noreferrer">
-                      View related work ↗
+                    <a href={project.link} target="_blank" rel="noreferrer">
+                      Explore related work ↗
                     </a>
                   </div>
                 </article>
               ))}
             </div>
-            <p className="muted" style={{ marginTop: 20 }}>
-              Portfolio note: add direct links to individual live projects when available.
-              The current links lead to your GitHub profile or YouTube channel, not to
-              a claim that every project shown has a separate live demo.
-            </p>
           </div>
         </section>
 
-        {/* ONLINE SHOP */}
-        <section className="section section-soft" id="shop">
-          <div className="container">
-            <SectionHeading
-              eyebrow="Jaymart Online Shop"
-              title="Computers, mobile phones and solar products."
-              description="Browse the product categories, search for an item and add what you need to your enquiry list. Send the list to Jaymart to confirm availability, specifications, pricing and delivery options."
-            />
+        {/* DIGITAL SERVICES */}
+        <section className="section" id="services">
+          <div className="wrap">
+            <div className="section-head">
+              <p className="eyebrow">04 / Services</p>
+              <h2 className="heading">Digital services for growing businesses.</h2>
+              <p className="lead">
+                Practical services focused on building a professional online
+                presence, improving customer communication and presenting
+                products and information clearly.
+              </p>
+            </div>
+            <div className="cards">
+              {[
+                ["⌘", "Website Design and Development", "Responsive business websites, portfolio websites and service websites."],
+                ["⚙", "Full-Stack Development", "Frontend and backend development with JavaScript, React, Node.js, Express and MongoDB."],
+                ["📣", "Social Media Management", "Page management, content planning, publishing and audience engagement support."],
+                ["✍", "Content Management", "Organising and maintaining website content, product information and digital communications."],
+                ["🎬", "Technology Content Creation", "Practical computer tips, Windows tutorials and useful digital technology content."],
+                ["🧰", "Computer Support", "Computer troubleshooting, software setup, maintenance and practical technical assistance."],
+              ].map(([icon, title, description]) => (
+                <article className="service-card" key={title}>
+                  <span className="service-icon">{icon}</span>
+                  <h3>{title}</h3>
+                  <p>{description}</p>
+                </article>
+              ))}
+            </div>
+          </div>
+        </section>
 
-            <div className="shop-toolbar">
+        {/* FULL ONLINE STORE */}
+        <section className="section shop-section" id="shop">
+          <div className="wrap">
+            <div className="section-head">
+              <p className="eyebrow">JAYMART ONLINE SHOP</p>
+              <h2 className="heading">The technology you need, in one place.</h2>
+              <p className="lead">
+                Computers, mobile phones, accessories, audio devices, networking
+                equipment, solar panels, solar fans, inverters, batteries and
+                related power accessories. Add products to your enquiry list to
+                request a confirmed quote from Jaymart.
+              </p>
+            </div>
+
+            <div className="shop-bar">
               <input
-                className="search-box"
+                className="shop-input"
                 type="search"
-                value={searchTerm}
-                onChange={(event) => setSearchTerm(event.target.value)}
-                placeholder="Search laptops, chargers, phones, solar panels..."
+                value={search}
+                onChange={(event) => setSearch(event.target.value)}
+                placeholder="Search products, categories and accessories..."
                 aria-label="Search products"
               />
-              <a className="btn btn-primary" href="#product-enquiry">
-                Enquiry List ({enquiryCount})
+              <a className="button button-dark" href="#cart">
+                Enquiry List ({cartQuantity})
               </a>
             </div>
 
-            <div className="category-list" aria-label="Filter product categories">
-              {PRODUCT_CATEGORIES.map((category) => (
+            <div className="category-scroll" aria-label="Product categories">
+              {CATEGORIES.map((category) => (
                 <button
                   key={category}
                   type="button"
@@ -1088,319 +1374,396 @@ function App() {
               ))}
             </div>
 
-            {enquiryNotice && <p className="shop-notice" role="status">{enquiryNotice}</p>}
+            <div className="catalogue-meta">
+              <span>{visibleProducts.length} products displayed</span>
+              <span>Prices are editable examples — confirm before publishing.</span>
+            </div>
 
             <div className="product-grid">
-              {filteredProducts.map((product) => (
+              {visibleProducts.map((product) => (
                 <article className="product-card" key={product.id}>
-                  <ImagePlaceholder src={product.image} alt={product.name} />
-                  <div className="product-body">
-                    <span className="product-badge">{product.badge}</span>
+                  <div className="product-image">
+                    <img
+                      src={product.image}
+                      alt={product.name}
+                      loading="lazy"
+                      onError={(event) => {
+                        event.currentTarget.style.display = "none";
+                        event.currentTarget.parentElement.insertAdjacentHTML(
+                          "beforeend",
+                          `<div class="product-placeholder">Add product photo<br/>${product.image}</div>`
+                        );
+                      }}
+                    />
+                    <span className={`stock-label ${product.available ? "" : "out"}`}>
+                      {product.available ? "Enquire to confirm stock" : "Out of stock"}
+                    </span>
+                  </div>
+                  <div className="product-info">
+                    <span className="product-category">{product.category}</span>
                     <h3>{product.name}</h3>
                     <p>{product.description}</p>
-                    <div className="product-actions">
-                      <button
-                        type="button"
-                        className="btn btn-primary btn-small"
-                        onClick={() => addToEnquiry(product)}
-                      >
-                        + Add to Enquiry
-                      </button>
-                    </div>
+                    <div className="price">{money(product.price)}</div>
+                    <div className="price-note">Example price · edit before publishing</div>
+                    <button
+                      type="button"
+                      className="button button-dark"
+                      disabled={!product.available}
+                      onClick={() => addProduct(product)}
+                    >
+                      {product.available ? "Add to Enquiry +" : "Unavailable"}
+                    </button>
                   </div>
                 </article>
               ))}
-              {filteredProducts.length === 0 && (
-                <div className="empty-state">
-                  No matching products found. Try another search or category.
+              {visibleProducts.length === 0 && (
+                <div className="empty-cart">
+                  No matching products. Try another search or category.
                 </div>
               )}
             </div>
 
-            <div className="enquiry-layout" id="product-enquiry">
-              <div className="enquiry-panel">
-                <h3>Your Product Enquiry List</h3>
-                <p className="muted">
-                  Choose products and quantities. We will confirm final prices and
-                  availability with you before an order is finalised.
-                </p>
+            <div className="cart-section" id="cart">
+              <h3>Your Product Enquiry</h3>
+              <p className="cart-intro">
+                Choose the items and quantities you want. Your list will be
+                prepared in WhatsApp so Jaymart can confirm the current prices,
+                availability and delivery details.
+              </p>
 
-                {enquiryItems.length === 0 ? (
-                  <div className="empty-enquiry">
-                    <div style={{ fontSize: "2rem" }}>🛒</div>
-                    <strong>Your list is empty</strong>
-                    <p className="muted">Add products from the catalogue to get started.</p>
-                  </div>
-                ) : (
-                  enquiryItems.map((item) => (
-                    <div className="enquiry-item" key={item.id}>
-                      <div>
-                        <strong>{item.name}</strong>
-                        <small>{item.category}</small>
-                        <div className="quantity-controls">
-                          <button
-                            type="button"
-                            aria-label={`Reduce quantity of ${item.name}`}
-                            onClick={() => changeQuantity(item.id, -1)}
-                          >−</button>
-                          <span>{item.quantity}</span>
-                          <button
-                            type="button"
-                            aria-label={`Increase quantity of ${item.name}`}
-                            onClick={() => changeQuantity(item.id, 1)}
-                          >+</button>
-                        </div>
-                      </div>
-                      <button
-                        type="button"
-                        className="remove-btn"
-                        onClick={() => removeFromEnquiry(item.id)}
-                      >
-                        Remove
-                      </button>
+              {notice && <div className="notice" role="status">{notice}</div>}
+
+              <div className="cart-layout">
+                <div>
+                  {cart.length === 0 ? (
+                    <div className="empty-cart">
+                      Your enquiry list is empty. Add a product from the catalogue.
                     </div>
-                  ))
-                )}
-              </div>
-
-              <form className="enquiry-form" onSubmit={sendProductEnquiry}>
-                <h3>Send Your Enquiry</h3>
-                <p className="muted">
-                  Enter your contact details so Jaymart can respond to your request.
-                </p>
-
-                <div className="field">
-                  <label htmlFor="customer-name">Your name *</label>
-                  <input
-                    id="customer-name"
-                    value={customerName}
-                    onChange={(event) => setCustomerName(event.target.value)}
-                    placeholder="Enter your full name"
-                    required
-                  />
+                  ) : (
+                    cart.map((item) => (
+                      <div className="cart-item" key={item.id}>
+                        <div>
+                          <strong>{item.name}</strong>
+                          <small>{item.category} · {money(item.price)} each (example)</small>
+                          <div className="qty">
+                            <button
+                              type="button"
+                              aria-label={`Reduce ${item.name} quantity`}
+                              onClick={() => setQuantity(item.id, item.quantity - 1)}
+                            >−</button>
+                            <strong>{item.quantity}</strong>
+                            <button
+                              type="button"
+                              aria-label={`Increase ${item.name} quantity`}
+                              onClick={() => setQuantity(item.id, item.quantity + 1)}
+                            >+</button>
+                          </div>
+                        </div>
+                        <button
+                          type="button"
+                          className="remove"
+                          onClick={() => removeProduct(item.id)}
+                        >
+                          Remove
+                        </button>
+                      </div>
+                    ))
+                  )}
                 </div>
 
-                <div className="field">
-                  <label htmlFor="customer-phone">Phone / WhatsApp number *</label>
-                  <input
-                    id="customer-phone"
-                    type="tel"
-                    value={customerPhone}
-                    onChange={(event) => setCustomerPhone(event.target.value)}
-                    placeholder="Enter your contact number"
-                    required
-                  />
-                </div>
-
-                <div className="field">
-                  <label htmlFor="customer-location">Delivery location or city</label>
-                  <input
-                    id="customer-location"
-                    value={customerLocation}
-                    onChange={(event) => setCustomerLocation(event.target.value)}
-                    placeholder="e.g. Benin City"
-                  />
-                </div>
-
-                <div className="field">
-                  <label htmlFor="customer-message">Additional requirements</label>
-                  <textarea
-                    id="customer-message"
-                    value={customerMessage}
-                    onChange={(event) => setCustomerMessage(event.target.value)}
-                    placeholder="Mention preferred brand, model, specifications, budget or delivery requirements."
-                  />
-                </div>
-
-                <button className="btn btn-whatsapp" type="submit" style={{ width: "100%" }}>
-                  Send Product Enquiry on WhatsApp ↗
-                </button>
-                <p className="form-note">
-                  This opens WhatsApp with your product list prepared. Review the
-                  message and press Send. Your order is not confirmed until Jaymart
-                  responds and confirms the details.
-                </p>
-              </form>
-            </div>
-          </div>
-        </section>
-
-        {/* CONSTRUCTION / CARPENTRY: separate from furniture making */}
-        <section className="section section-dark" id="construction">
-          <div className="container">
-            <div className="construction-intro">
-              <SectionHeading
-                eyebrow="Construction and Building Carpentry"
-                title="Practical carpentry for building projects."
-                description="Alongside my technology work, I have almost 15 years of experience in carpentry and building-related woodwork. This service focuses on construction carpentry and site work, not furniture-making."
-              />
-            </div>
-
-            <div className="cards-grid">
-              {CONSTRUCTION_SERVICES.map((service) => (
-                <article className="construction-card" key={service.title}>
-                  <ImagePlaceholder src={service.image} alt={service.title} />
-                  <div className="construction-body">
-                    <h3>{service.title}</h3>
-                    <p>{service.description}</p>
-                  </div>
-                </article>
-              ))}
-            </div>
-
-            <div className="construction-note">
-              <strong>Project enquiries:</strong> Share the project location, scope
-              of work, drawings or measurements where available, expected timeline
-              and site photos. Work scope, materials, pricing and scheduling should
-              be agreed upon before commencement. Structural and concrete-related
-              work should be carried out in coordination with appropriately
-              qualified construction professionals.
-            </div>
-
-            <div className="hero-actions" style={{ marginTop: 24 }}>
-              <WhatsAppLink message="Hello Jaymart, I would like to discuss a building carpentry or construction project. I can share the location, scope of work and photos for assessment." >
-                Discuss a Carpentry Project ↗
-              </WhatsAppLink>
-              <a className="btn btn-outline" href="#contact">Request a Consultation</a>
-            </div>
-          </div>
-        </section>
-
-        {/* TECH CREATOR */}
-        <section className="section" id="content">
-          <div className="container">
-            <SectionHeading
-              eyebrow="Technology Content"
-              title="Making technology easier to understand."
-              description="I create and share practical technology content, including computer tips, Windows features and digital tools. This section connects visitors with my public content channels."
-            />
-
-            <div className="content-banner">
-              <div>
-                <h3>Explore practical tech tips and tutorials</h3>
-                <p>
-                  Visit my channels for technology content and updates. Add your
-                  preferred tutorial thumbnails or video embeds here as your
-                  content library grows.
-                </p>
-              </div>
-              <a className="btn btn-primary" href={BUSINESS.youtube} target="_blank" rel="noreferrer">
-                Visit YouTube Channel ↗
-              </a>
-            </div>
-
-            {/*
-              OPTIONAL VIDEO IMAGE PLACEHOLDERS:
-              Add your own tutorial thumbnails to /public/images/tutorial-1.jpg,
-              /public/images/tutorial-2.jpg, and /public/images/tutorial-3.jpg.
-              You can add a grid of video cards here later with links to each video.
-            */}
-
-            <div className="social-links" style={{ marginTop: 25 }}>
-              <a className="social-link" href={BUSINESS.youtube} target="_blank" rel="noreferrer">▶ YouTube</a>
-              <a className="social-link" href={BUSINESS.facebook} target="_blank" rel="noreferrer">f Facebook</a>
-              <a className="social-link" href={BUSINESS.instagram} target="_blank" rel="noreferrer">◎ Instagram</a>
-              <a className="social-link" href={BUSINESS.tiktok} target="_blank" rel="noreferrer">♪ TikTok</a>
-            </div>
-          </div>
-        </section>
-
-        {/* CONTACT */}
-        <section className="section section-dark" id="contact">
-          <div className="container">
-            <SectionHeading
-              eyebrow="Get in Touch"
-              title="Tell me what you need."
-              description="Contact me about web development, social media and content management, computers and accessories, mobile phones, solar products, or construction carpentry."
-            />
-
-            <div className="contact-grid">
-              <div className="contact-info">
-                <div className="contact-item">
-                  <strong>📍 Location</strong>
-                  <span>{BUSINESS.location}</span>
-                </div>
-                <div className="contact-item">
-                  <strong>✉️ Email</strong>
-                  <a href={`mailto:${BUSINESS.email}`}>{BUSINESS.email}</a>
-                </div>
-                <div className="contact-item">
-                  <strong>📞 Phone</strong>
-                  <a href="tel:+2348156015526">{BUSINESS.phone}</a>
-                  <a href="tel:+2348104675749">{BUSINESS.alternatePhone}</a>
-                </div>
-                <div className="contact-item">
-                  <strong>💬 WhatsApp</strong>
-                  <a
-                    href={`https://wa.me/${BUSINESS.whatsapp}`}
-                    target="_blank"
-                    rel="noreferrer"
-                  >
-                    Start a WhatsApp conversation ↗
-                  </a>
-                </div>
-                <div className="social-links">
-                  <a className="social-link" href={BUSINESS.github} target="_blank" rel="noreferrer">GitHub</a>
-                  <a className="social-link" href={BUSINESS.linkedin} target="_blank" rel="noreferrer">LinkedIn</a>
-                  <a className="social-link" href={BUSINESS.facebook} target="_blank" rel="noreferrer">Facebook</a>
-                  <a className="social-link" href={BUSINESS.instagram} target="_blank" rel="noreferrer">Instagram</a>
-                </div>
-              </div>
-
-              <form className="contact-form" onSubmit={sendGeneralContact}>
-                <h3>Send a Message</h3>
-                {contactNotice && (
-                  <p className="shop-notice" role="status">{contactNotice}</p>
-                )}
-                <div className="form-grid">
+                <form onSubmit={sendOrder}>
                   <div className="field">
-                    <label htmlFor="contact-name">Your name *</label>
+                    <label htmlFor="order-name">Full name *</label>
                     <input
-                      id="contact-name"
-                      value={contactName}
-                      onChange={(event) => setContactName(event.target.value)}
+                      id="order-name"
+                      value={customer.name}
+                      onChange={(event) => setCustomer({ ...customer, name: event.target.value })}
                       placeholder="Your name"
                       required
                     />
                   </div>
                   <div className="field">
-                    <label htmlFor="contact-email">Email address *</label>
+                    <label htmlFor="order-phone">Phone / WhatsApp *</label>
                     <input
-                      id="contact-email"
-                      type="email"
-                      value={contactEmail}
-                      onChange={(event) => setContactEmail(event.target.value)}
-                      placeholder="you@example.com"
+                      id="order-phone"
+                      type="tel"
+                      value={customer.phone}
+                      onChange={(event) => setCustomer({ ...customer, phone: event.target.value })}
+                      placeholder="Your phone number"
                       required
                     />
                   </div>
-                  <div className="field full-width">
-                    <label htmlFor="contact-subject">What is your enquiry about?</label>
+                  <div className="field">
+                    <label htmlFor="order-location">Delivery location</label>
                     <input
-                      id="contact-subject"
-                      value={contactSubject}
-                      onChange={(event) => setContactSubject(event.target.value)}
-                      placeholder="Website, product, social media, carpentry..."
+                      id="order-location"
+                      value={customer.location}
+                      onChange={(event) => setCustomer({ ...customer, location: event.target.value })}
+                      placeholder="City or delivery area"
                     />
                   </div>
-                  <div className="field full-width">
-                    <label htmlFor="contact-message">Your message *</label>
+                  <div className="field">
+                    <label htmlFor="order-message">Additional requirements</label>
                     <textarea
-                      id="contact-message"
-                      value={contactMessage}
-                      onChange={(event) => setContactMessage(event.target.value)}
-                      placeholder="Tell me about your needs, project or questions."
-                      required
+                      id="order-message"
+                      value={customer.message}
+                      onChange={(event) => setCustomer({ ...customer, message: event.target.value })}
+                      placeholder="Preferred brand, model, specifications or delivery details"
                     />
+                  </div>
+                  <button className="button button-green" type="submit" style={{ width: "100%" }}>
+                    Send Enquiry on WhatsApp ↗
+                  </button>
+                  <p className="note">
+                    WhatsApp opens with the selected products and quantities.
+                    You must press Send in WhatsApp. This is not an automatic
+                    payment or confirmed-order system.
+                  </p>
+                </form>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* CARPENTRY SWIPE GALLERY */}
+        <section className="section" id="carpentry">
+          <div className="wrap">
+            <div className="carpentry-intro">
+              <p className="eyebrow">05 / Building Carpentry and Construction</p>
+              <h2 className="heading">Work you can see. Experience you can discuss.</h2>
+              <p className="lead">
+                Almost 15 years of practical carpentry experience in roofing,
+                decking and formwork, lintel and parapet formwork, ceilings,
+                house boarding and other building-related timber work. This is
+                construction carpentry, separate from furniture-making.
+              </p>
+            </div>
+
+            <div
+              className="gallery"
+              onMouseEnter={() => setPaused(true)}
+              onMouseLeave={() => setPaused(false)}
+              onTouchStart={() => setPaused(true)}
+              onTouchEnd={() => setPaused(false)}
+            >
+              <div
+                className="gallery-image"
+                onTouchStart={(event) => {
+                  const touch = event.touches[0];
+                  event.currentTarget.dataset.touchStart = String(touch.clientX);
+                }}
+                onTouchEnd={(event) => {
+                  const start = Number(event.currentTarget.dataset.touchStart || 0);
+                  const end = event.changedTouches[0].clientX;
+                  const distance = end - start;
+                  if (Math.abs(distance) > 45) moveSlide(distance > 0 ? -1 : 1);
+                }}
+              >
+                <img
+                  key={currentSlide.image}
+                  src={currentSlide.image}
+                  alt={currentSlide.title}
+                  onError={(event) => {
+                    event.currentTarget.style.display = "none";
+                    event.currentTarget.parentElement.insertAdjacentHTML(
+                      "afterbegin",
+                      `<div class="gallery-placeholder">Add your actual project photo here:<br/>${currentSlide.image}</div>`
+                    );
+                  }}
+                />
+
+                <button
+                  type="button"
+                  className="gallery-arrow left"
+                  onClick={() => moveSlide(-1)}
+                  aria-label="Previous carpentry project"
+                >‹</button>
+                <button
+                  type="button"
+                  className="gallery-arrow right"
+                  onClick={() => moveSlide(1)}
+                  aria-label="Next carpentry project"
+                >›</button>
+
+                <div className="gallery-caption">
+                  <small>Carpentry project {slide + 1} / {CARPENTRY_GALLERY.length}</small>
+                  <h3>{currentSlide.title}</h3>
+                  <p>{currentSlide.description}</p>
+                </div>
+              </div>
+
+              <div className="gallery-bottom">
+                <div className="gallery-controls">
+                  <button type="button" onClick={() => moveSlide(-1)}>← Previous</button>
+                  <button
+                    type="button"
+                    onClick={() => setPaused((value) => !value)}
+                  >
+                    {paused ? "▶ Resume Auto-Slide" : "Ⅱ Pause Auto-Slide"}
+                  </button>
+                  <button type="button" onClick={() => moveSlide(1)}>Next →</button>
+                </div>
+
+                <div className="dots" aria-label="Choose a project image">
+                  {CARPENTRY_GALLERY.map((item, index) => (
+                    <button
+                      key={item.image}
+                      type="button"
+                      className={`dot ${slide === index ? "active" : ""}`}
+                      onClick={() => setSlide(index)}
+                      aria-label={`Show ${item.title}`}
+                      aria-pressed={slide === index}
+                    />
+                  ))}
+                </div>
+                <span className="gallery-count">
+                  {String(slide + 1).padStart(2, "0")} / {String(CARPENTRY_GALLERY.length).padStart(2, "0")}
+                </span>
+              </div>
+            </div>
+
+            <div className="construction-services">
+              {[
+                ["Roof carpentry", "Roof framing, trusses and related timber work."],
+                ["Decking and formwork", "Timber support and formwork for building construction."],
+                ["Lintel and parapet formwork", "Carpentry and formwork coordinated with the construction team."],
+                ["Ceiling installation", "Ceiling framing, supports and boarding."],
+                ["House boarding", "Building boarding and related timber work."],
+                ["General carpentry contracting", "Project scope discussion, site coordination and carpentry work."],
+              ].map(([title, description]) => (
+                <div className="construction-service" key={title}>
+                  <strong>{title}</strong>
+                  <span>{description}</span>
+                </div>
+              ))}
+            </div>
+
+            <div className="hero-buttons" style={{ marginTop: 25 }}>
+              <a
+                className="button button-primary"
+                href={`https://wa.me/${SITE.whatsapp}?text=${encodeURIComponent("Hello, I would like to discuss a building carpentry project. I can share site photos, location and scope of work.")}`}
+                target="_blank"
+                rel="noreferrer"
+              >
+                Discuss a Carpentry Project ↗
+              </a>
+            </div>
+          </div>
+        </section>
+
+        {/* TECHNOLOGY CONTENT */}
+        <section className="section" id="content">
+          <div className="wrap">
+            <div className="section-head">
+              <p className="eyebrow">06 / Technology Content</p>
+              <h2 className="heading">Making everyday technology easier to use.</h2>
+              <p className="lead">
+                I share practical technology tutorials and digital content,
+                including computer features and Windows tips. Explore my public
+                channels for videos and updates.
+              </p>
+            </div>
+            <div className="content-banner">
+              <div>
+                <h3>Jaymart Computers on YouTube</h3>
+                <p>
+                  Add your favourite video thumbnails and direct tutorial links
+                  here as your content library grows.
+                </p>
+              </div>
+              <a className="button button-primary" href={SITE.youtube} target="_blank" rel="noreferrer">
+                Visit YouTube ↗
+              </a>
+            </div>
+            <div className="socials">
+              <a href={SITE.youtube} target="_blank" rel="noreferrer">YouTube ↗</a>
+              <a href={SITE.facebook} target="_blank" rel="noreferrer">Facebook ↗</a>
+              <a href={SITE.instagram} target="_blank" rel="noreferrer">Instagram ↗</a>
+              <a href={SITE.tiktok} target="_blank" rel="noreferrer">TikTok ↗</a>
+            </div>
+          </div>
+        </section>
+
+        {/* CONTACT */}
+        <section className="section" id="contact">
+          <div className="wrap">
+            <div className="section-head">
+              <p className="eyebrow">07 / Contact</p>
+              <h2 className="heading">Have a project or product in mind?</h2>
+              <p className="lead">
+                Contact me about websites, digital content, computers and
+                accessories, mobile phones, solar products or construction carpentry.
+              </p>
+            </div>
+
+            <div className="contact-grid">
+              <div>
+                <div className="contact-list">
+                  <div className="contact-item">
+                    <strong>Location</strong>
+                    <span>{SITE.location}</span>
+                  </div>
+                  <div className="contact-item">
+                    <strong>Email</strong>
+                    <a href={`mailto:${SITE.email}`}>{SITE.email}</a>
+                  </div>
+                  <div className="contact-item">
+                    <strong>Phone</strong>
+                    <a href="tel:+2348156015526">{SITE.phone}</a>
+                  </div>
+                  <div className="contact-item">
+                    <strong>WhatsApp</strong>
+                    <a href={`https://wa.me/${SITE.whatsapp}`} target="_blank" rel="noreferrer">
+                      Start a conversation ↗
+                    </a>
                   </div>
                 </div>
-                <button className="btn btn-whatsapp" type="submit" style={{ width: "100%" }}>
+                <div className="socials">
+                  <a href={SITE.github} target="_blank" rel="noreferrer">GitHub</a>
+                  <a href={SITE.linkedin} target="_blank" rel="noreferrer">LinkedIn</a>
+                  <a href={SITE.facebook} target="_blank" rel="noreferrer">Facebook</a>
+                  <a href={SITE.instagram} target="_blank" rel="noreferrer">Instagram</a>
+                </div>
+              </div>
+
+              <form className="contact-form" onSubmit={sendContact}>
+                <h3>Send a Message</h3>
+                <div className="field">
+                  <label htmlFor="contact-name">Your name *</label>
+                  <input
+                    id="contact-name"
+                    value={contact.name}
+                    onChange={(event) => setContact({ ...contact, name: event.target.value })}
+                    placeholder="Your name"
+                    required
+                  />
+                </div>
+                <div className="field">
+                  <label htmlFor="contact-email">Email address *</label>
+                  <input
+                    id="contact-email"
+                    type="email"
+                    value={contact.email}
+                    onChange={(event) => setContact({ ...contact, email: event.target.value })}
+                    placeholder="you@example.com"
+                    required
+                  />
+                </div>
+                <div className="field">
+                  <label htmlFor="contact-message">How can I help? *</label>
+                  <textarea
+                    id="contact-message"
+                    value={contact.message}
+                    onChange={(event) => setContact({ ...contact, message: event.target.value })}
+                    placeholder="Tell me about your project, product or service enquiry."
+                    required
+                  />
+                </div>
+                <button className="button button-primary" type="submit" style={{ width: "100%" }}>
                   Continue to WhatsApp ↗
                 </button>
-                <p className="form-note">
-                  Your message will open in WhatsApp for you to review and send.
-                  The email field is included in the message so you can be contacted
-                  using the details you provide.
+                <p className="note">
+                  This prepares a message in WhatsApp. Press Send there to submit it.
                 </p>
               </form>
             </div>
@@ -1408,34 +1771,27 @@ function App() {
         </section>
       </main>
 
-      <footer className="site-footer">
-        <div className="container footer-row">
+      <footer className="footer">
+        <div className="wrap footer-row">
           <div>
-            <strong>JAYMART COMPUTERS AND GADGETRY HUB</strong>
-            <div>Technology products · Digital services · Building carpentry</div>
+            <strong>{SITE.business}</strong>
+            <div>Digital services · Computers · Mobile · Solar · Carpentry</div>
           </div>
-          <div className="footer-links">
-            <a href="#about">About</a>
-            <a href="#development">Digital Services</a>
-            <a href="#shop">Shop</a>
-            <a href="#construction">Carpentry</a>
-            <a href="#contact">Contact</a>
-          </div>
-          <div>© {new Date().getFullYear()} Jaymart. All rights reserved.</div>
+          <span>© {new Date().getFullYear()} Jaymart. All rights reserved.</span>
         </div>
       </footer>
 
       <a
-        className="floating-whatsapp"
-        href={`https://wa.me/${BUSINESS.whatsapp}?text=${encodeURIComponent("Hello Jaymart, I would like to make an enquiry.")}`}
+        className="float-wa"
+        href={`https://wa.me/${SITE.whatsapp}?text=${encodeURIComponent("Hello Jaymart, I would like to make an enquiry.")}`}
         target="_blank"
         rel="noreferrer"
         aria-label="Contact Jaymart on WhatsApp"
-        title="Chat with Jaymart on WhatsApp"
+        title="Chat with Jaymart"
       >
         ☎
       </a>
-    </>
+    </div>
   );
 }
 
